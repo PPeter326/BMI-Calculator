@@ -272,6 +272,32 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     
+    /// Saves data anytime user changes input and BMI calculation changes.
+    func saveUserInput() {
+        // 1. Build path to application support directory
+        let fm = FileManager.default
+        do {
+            let appSupportDirectory = try fm.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            // 2. Build path to custom app directory
+            let bundleID = Bundle.main.bundleIdentifier ?? "BMICalculator"
+            let appDirectoryURL = appSupportDirectory.appendingPathComponent(bundleID, isDirectory: true)
+            // 3. Create directory
+            try fm.createDirectory(at: appDirectoryURL, withIntermediateDirectories: false, attributes: nil)
+            // 4. Build path to file
+            let fileURL = appDirectoryURL.appendingPathComponent("data").appendingPathExtension("plist")
+            // 5. create file
+            //   a. create data
+            let encoder = PropertyListEncoder()
+            let weightData = try encoder.encode(weightInLbs)
+            //  b. write data to file
+            try weightData.write(to: fileURL)
+            
+        } catch let error as NSError {
+            print("error: \(error.domain)")
+        }
+        
+    }
+    
     /// This method takes a double amount and round to the nearest 1 decimal point
     ///
     /// - Parameter amount: an amount in double
