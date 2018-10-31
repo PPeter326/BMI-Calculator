@@ -212,6 +212,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
         }
         
+        // save user input
+        saveUserInput()
+        
         updateUI()
     }
     
@@ -271,31 +274,75 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
     }
     
+    var fileURL: URL?
+    var fm = FileManager.default
     
-    /// Saves data anytime user changes input and BMI calculation changes.
-    func saveUserInput() {
-        // 1. Build path to application support directory
-        let fm = FileManager.default
+    struct ArchiveKey {
+        static let weight = "weight"
+    }
+    
+    func buildFileURL() -> URL? {
+        
+        var fileURL: URL?
+        
         do {
+            // build path to application support directory
             let appSupportDirectory = try fm.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            // 2. Build path to custom app directory
+            // build path to custom app directory
             let bundleID = Bundle.main.bundleIdentifier ?? "BMICalculator"
             let appDirectoryURL = appSupportDirectory.appendingPathComponent(bundleID, isDirectory: true)
-            // 3. Create directory
-            try fm.createDirectory(at: appDirectoryURL, withIntermediateDirectories: false, attributes: nil)
-            // 4. Build path to file
-            let fileURL = appDirectoryURL.appendingPathComponent("data").appendingPathExtension("plist")
-            // 5. create file
-            //   a. create data
-            let encoder = PropertyListEncoder()
-            let weightData = try encoder.encode(weightInLbs)
-            //  b. write data to file
-            try weightData.write(to: fileURL)
+            // create directory
+            do {
+                try fm.createDirectory(at: appDirectoryURL, withIntermediateDirectories: false, attributes: nil)
+            } catch let error as NSError {
+                if error.code != NSFileWriteFileExistsError {
+                    print("error:  \(error.domain) \(error.description)")
+                }
+            }
+            // Build path to file
+            fileURL = appDirectoryURL.appendingPathComponent("data").appendingPathExtension("plist")
             
         } catch let error as NSError {
-            print("error: \(error.domain)")
+            print("error: \(error.domain) \(error.description)")
         }
         
+        return fileURL
+    }
+    /// Saves data to file
+    func saveUserInput() {
+        // Build path to file if it doesn't exist already
+        if fileURL == nil {
+            fileURL = buildFileURL()
+        }
+        
+        // 5. create file
+        //   a. create data
+        
+        let keyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
+        keyedArchiver.encode(weightInLbs, forKey: ArchiveKey.weight)
+        if let fileURL = fileURL {
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try keyedArchiver.encodedData.write(to: fileURL)
+                    
+                    // check to make sure the file was created/written
+                    if let fileAttributes = try? self.fm.attributesOfItem(atPath: fileURL.path) {
+                        let creationDate = fileAttributes[FileAttributeKey.creationDate]
+                        let modificationDate = fileAttributes[FileAttributeKey.modificationDate]
+                        print("file created: \(creationDate!) modified: \(modificationDate!)")
+                    }
+                } catch let error as NSError {
+                    print("error: \(error.domain)")
+                }
+            }
+        }
+    }
+    
+    func loadUserInput() {
+        // build path to file
+        fileURL = buildFileURL()
+        
+        // load file
     }
     
     /// This method takes a double amount and round to the nearest 1 decimal point
