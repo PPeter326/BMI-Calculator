@@ -22,7 +22,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var weightInLbsWholeNumber = 170
     var weightInLbsDecimal = 0
     var weightInLbs: Double {
-        return Double(weightInLbsWholeNumber) + Double(weightInLbsDecimal) / 10
+        get {
+            return Double(weightInLbsWholeNumber) + Double(weightInLbsDecimal) / 10
+        }
+        set {
+            weightInLbsWholeNumber = Int(newValue)
+            weightInLbsDecimal = Int(newValue - Double(weightInLbsWholeNumber))
+        }
     }
     
     var heightInFt: Int = 5
@@ -48,6 +54,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         super.viewDidLoad()
         
         inputType = .none
+        loadUserInput()
         updateUI()
     }
     
@@ -282,7 +289,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func buildFileURL() -> URL? {
-        
         var fileURL: URL?
         
         do {
@@ -301,13 +307,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
             // Build path to file
             fileURL = appDirectoryURL.appendingPathComponent("data").appendingPathExtension("plist")
-            
         } catch let error as NSError {
             print("error: \(error.domain) \(error.description)")
         }
-        
         return fileURL
     }
+    
     /// Saves data to file
     func saveUserInput() {
         // Build path to file if it doesn't exist already
@@ -315,34 +320,44 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             fileURL = buildFileURL()
         }
         
-        // 5. create file
-        //   a. create data
-        
+        // prepare data to be archived
         let keyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
         keyedArchiver.encode(weightInLbs, forKey: ArchiveKey.weight)
+        
+        // archive data in background thread
         if let fileURL = fileURL {
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    try keyedArchiver.encodedData.write(to: fileURL)
-                    
-                    // check to make sure the file was created/written
-                    if let fileAttributes = try? self.fm.attributesOfItem(atPath: fileURL.path) {
-                        let creationDate = fileAttributes[FileAttributeKey.creationDate]
-                        let modificationDate = fileAttributes[FileAttributeKey.modificationDate]
-                        print("file created: \(creationDate!) modified: \(modificationDate!)")
-                    }
-                } catch let error as NSError {
-                    print("error: \(error.domain)")
+            do {
+                try keyedArchiver.encodedData.write(to: fileURL)
+                
+                // check to make sure the file was created/written
+                if let fileAttributes = try? self.fm.attributesOfItem(atPath: fileURL.path) {
+                    let creationDate = fileAttributes[FileAttributeKey.creationDate]
+                    let modificationDate = fileAttributes[FileAttributeKey.modificationDate]
+                    print("file created: \(creationDate!) modified: \(modificationDate!)")
                 }
+            } catch let error as NSError {
+                print("error: \(error.domain)")
             }
         }
     }
     
     func loadUserInput() {
-        // build path to file
+        // build URL to file
         fileURL = buildFileURL()
         
-        // load file
+        // load data from URL
+        if let url = fileURL {
+            do {
+                let weightData = try Data(contentsOf: url)
+                let keyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: weightData)
+                let weight = keyedUnarchiver.decodeDouble(forKey: ArchiveKey.weight)
+                weightInLbs = weight
+            } catch let error as NSError {
+                print("error: \(error.domain) \(error.description)")
+            }
+        } else {
+            print("file url not available")
+        }
     }
     
     /// This method takes a double amount and round to the nearest 1 decimal point
