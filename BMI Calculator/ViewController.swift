@@ -18,6 +18,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
     
+    // MARK: Model
+    var userInput: UserInput?
+    
+    
     // MARK: Weight/Height Input
     var weightInLbsWholeNumber = 170
     var weightInLbsDecimal = 0
@@ -34,13 +38,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var heightInFt: Int = 5
     var heightInInches: Int = 10
     var totalHeightInches: Double {
-      return Double(heightInFt * 12) + Double(heightInInches)
+        get {
+          return Double(heightInFt * 12) + Double(heightInInches)
+        }
+        set {
+            heightInFt = Int(newValue / 12)
+            heightInInches = Int(newValue) % 12
+        }
     }
     
     let weightWholeNumberRange = Array(90...345)
     let weightDecimalRange = Array(0...9)
     let heightInFeetRange = Array(4...6)
-    let heightInInchesRange = Array(0...10)
+    let heightInInchesRange = Array(0...11)
     
     // MARK: BMI
     var BMI: Double? {
@@ -321,13 +331,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
         
         // prepare data to be archived
-        let keyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
-        keyedArchiver.encode(weightInLbs, forKey: ArchiveKey.weight)
+        let jsonEncoder = JSONEncoder()
+        userInput = UserInput(weightInLbs: weightInLbs, heightInInches: totalHeightInches)
+        let inputData = try! jsonEncoder.encode(userInput!)
         
         // archive data in background thread
         if let fileURL = fileURL {
             do {
-                try keyedArchiver.encodedData.write(to: fileURL)
+                try inputData.write(to: fileURL)
                 
                 // check to make sure the file was created/written
                 if let fileAttributes = try? self.fm.attributesOfItem(atPath: fileURL.path) {
@@ -349,9 +360,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if let url = fileURL {
             do {
                 let weightData = try Data(contentsOf: url)
-                let keyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: weightData)
-                let weight = keyedUnarchiver.decodeDouble(forKey: ArchiveKey.weight)
-                weightInLbs = weight
+                let jsonDecoder = JSONDecoder()
+                userInput = try! jsonDecoder.decode(UserInput.self, from: weightData)
+                weightInLbs = userInput!.weightInLbs
+                totalHeightInches = userInput!.heightInInches
             } catch let error as NSError {
                 print("error: \(error.domain) \(error.description)")
             }
@@ -431,6 +443,5 @@ extension Double {
     var inchToMeter: Double {
         return self * 0.0254
     }
-    
 }
 
