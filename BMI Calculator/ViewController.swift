@@ -39,6 +39,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     var weightInKgWholeNumber = 50
     var weightInKgDecimal = 9
+    var weightInKgs: Double {
+        get {
+            return Double(weightInKgWholeNumber) + Double(weightInKgDecimal) / 10
+        }
+        set {
+            weightInKgWholeNumber = Int(newValue)
+            weightInKgDecimal = Int(newValue - Double(weightInKgWholeNumber))
+        }
+    }
     
     var heightInFt: Int = 5
     var heightInInches: Int = 10
@@ -54,6 +63,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     var heightInMeter = 1
     var heightInCentimeter = 60
+    var totalHeightCentimeters: Double {
+        get {
+            return Double(heightInMeter * 100) + Double(heightInCentimeter)
+        }
+        set {
+            heightInMeter = Int(newValue / 100)
+            heightInCentimeter = Int(newValue) % 100
+        }
+    }
 
     struct ImperialNumberRange {
         static let weightWholeNumberRange = Array(90...443)
@@ -173,10 +191,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             // configure pickerview for weight input
             pickerView.isHidden = false
             // selects pickerview to previous position
-            let weightInLbsWholeNumberIndex = ImperialNumberRange.weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
-            let weightInLbsDecimalIndex = ImperialNumberRange.weightDecimalRange.firstIndex(of: weightInLbsDecimal)!
-            pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
-            pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
+            if measurementSystem == .imperial {
+                let weightInLbsWholeNumberIndex = ImperialNumberRange.weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
+                let weightInLbsDecimalIndex = ImperialNumberRange.weightDecimalRange.firstIndex(of: weightInLbsDecimal)!
+                pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
+                pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
+            } else if measurementSystem == .metric {
+                let weightInKgWholeNumberIndex = MetricNumberRange.weightWholeNumberRange.firstIndex(of: weightInKgWholeNumber)!
+                let weightInKgDecimalIndex = MetricNumberRange.weightDecimalRange.firstIndex(of: weightInKgDecimal)!
+                pickerView.selectRow(weightInKgWholeNumberIndex, inComponent: 0, animated: false)
+                pickerView.selectRow(weightInKgDecimalIndex, inComponent: 1, animated: false)
+            }
             // configure segment control
             segmentedControl.isHidden = false
             segmentedControl.setTitle("Lbs", forSegmentAt: 0)
@@ -186,10 +211,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
             // update default pickerview value for height input
             pickerView.isHidden = false
-            let heightInFeetIndex = ImperialNumberRange.heightInFeetRange.firstIndex(of: heightInFt)!
-            let heightInInchIndex = ImperialNumberRange.heightInInchesRange.firstIndex(of: heightInInches)!
-            pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
-            pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
+            if measurementSystem == .imperial {
+                let heightInFeetIndex = ImperialNumberRange.heightInFeetRange.firstIndex(of: heightInFt)!
+                let heightInInchIndex = ImperialNumberRange.heightInInchesRange.firstIndex(of: heightInInches)!
+                pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
+                pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
+            } else if measurementSystem == .metric {
+                let heightInMeterIndex = 0
+                let heightInCentimeterIndex = MetricNumberRange.heightInCentimeterRange.firstIndex(of: heightInCentimeter)!
+                pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
+                pickerView.selectRow(heightInCentimeterIndex, inComponent: 2, animated: false)
+            }
             // configure segment control
             segmentedControl.isHidden = false
             segmentedControl.setTitle("Ft/In", forSegmentAt: 0)
