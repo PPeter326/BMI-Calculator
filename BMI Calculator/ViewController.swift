@@ -37,6 +37,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             weightInLbsDecimal = Int(newValue - Double(weightInLbsWholeNumber))
         }
     }
+    var weightInKgWholeNumber = 50
+    var weightInKgDecimal = 9
     
     var heightInFt: Int = 5
     var heightInInches: Int = 10
@@ -50,10 +52,23 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    let weightWholeNumberRange = Array(90...443)
-    let weightDecimalRange = Array(0...9)
-    let heightInFeetRange = Array(4...6)
-    let heightInInchesRange = Array(0...11)
+    var heightInMeter = 1
+    var heightInCentimeter = 60
+
+    struct ImperialNumberRange {
+        static let weightWholeNumberRange = Array(90...443)
+        static let weightDecimalRange = Array(0...9)
+        static let heightInFeetRange = Array(4...6)
+        static let heightInInchesRange = Array(0...11)
+    }
+    
+    struct MetricNumberRange {
+        static let weightWholeNumberRange = Array(40...200)
+        static let weightDecimalRange = Array(0...9)
+        static let heightInMeterRange = 1
+        static let heightInCentimeterRange = Array(40...99)
+    }
+    
     
     // MARK: BMI
     var BMI: Double? {
@@ -135,6 +150,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         updateUI()
     }
     
+    var measurementSystem: MeasurementSystem = .imperial
+    
+    enum MeasurementSystem {
+        case metric
+        case imperial
+    }
+    
     
     // MARK: - UI Update
     private func updateUI() {
@@ -150,8 +172,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
             // configure pickerview for weight input
             pickerView.isHidden = false
-            let weightInLbsWholeNumberIndex = weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
+            // selects pickerview to previous position
+            let weightInLbsWholeNumberIndex = ImperialNumberRange.weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
+            let weightInLbsDecimalIndex = ImperialNumberRange.weightDecimalRange.firstIndex(of: weightInLbsDecimal)!
             pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
+            pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
             // configure segment control
             segmentedControl.isHidden = false
             segmentedControl.setTitle("Lbs", forSegmentAt: 0)
@@ -161,8 +186,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
             // update default pickerview value for height input
             pickerView.isHidden = false
-            let heightInFeetIndex = heightInFeetRange.firstIndex(of: heightInFt)!
-            let heightInInchIndex = heightInInchesRange.firstIndex(of: heightInInches)!
+            let heightInFeetIndex = ImperialNumberRange.heightInFeetRange.firstIndex(of: heightInFt)!
+            let heightInInchIndex = ImperialNumberRange.heightInInchesRange.firstIndex(of: heightInInches)!
             pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
             pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
             // configure segment control
@@ -198,54 +223,114 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // MARK: - PickerView Delegate Methods
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if inputType == .weightInput {
-            switch component {
-            case 0:
-                return String(weightWholeNumberRange[row])
-            case 1:
-                return ".\(weightDecimalRange[row])"
-            case 2:
-                return "lbs"
-            default:
-                return nil
+        switch inputType {
+        case .weightInput:
+            if measurementSystem == .imperial {
+                switch component {
+                case 0:
+                    return String(ImperialNumberRange.weightWholeNumberRange[row])
+                case 1:
+                    return ".\(ImperialNumberRange.weightDecimalRange[row])"
+                case 2:
+                    return "lbs"
+                default:
+                    return nil
+                }
+            } else if measurementSystem == .metric {
+                switch component {
+                case 0:
+                    return String(MetricNumberRange.weightWholeNumberRange[row])
+                case 1:
+                    return ".\(MetricNumberRange.weightDecimalRange[row])"
+                case 2:
+                    return "kg"
+                default:
+                    return nil
+                }
             }
-        } else {
-            switch component {
-            case 0:
-                return String(heightInFeetRange[row])
-            case 1:
-                return "ft"
-            case 2:
-                return "\(heightInInchesRange[row])"
-            case 3:
-                return "in"
-            default:
-                return nil
+        case .heightInput:
+            if measurementSystem == .imperial {
+                switch component {
+                case 0:
+                    return String(ImperialNumberRange.heightInFeetRange[row])
+                case 1:
+                    return "ft"
+                case 2:
+                    return "\(ImperialNumberRange.heightInInchesRange[row])"
+                case 3:
+                    return "in"
+                default:
+                    return nil
+                }
+            } else if measurementSystem == .metric {
+                switch component {
+                case 0:
+                    return String(MetricNumberRange.heightInMeterRange)
+                case 1:
+                    return "m"
+                case 2:
+                    return "\(MetricNumberRange.heightInCentimeterRange[row])"
+                case 3:
+                    return "cm"
+                default:
+                    return nil
+                }
             }
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if inputType == .weightInput {
-            switch component {
-            case 0:
-                weightInLbsWholeNumber = weightWholeNumberRange[row]
-            case 1:
-                weightInLbsDecimal = weightDecimalRange[row]
-            default:
-                break
-            }
-        } else {
-            switch component {
-            case 0:
-                heightInFt = heightInFeetRange[row]
-            case 2:
-                heightInInches = heightInInchesRange[row]
-            default:
-                break
-            }
+        case .none:
+            return nil
         }
         
+        return nil
+    }
+    
+    
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch inputType {
+        case .weightInput:
+            if measurementSystem == .imperial {
+                switch component {
+                case 0:
+                    weightInLbsWholeNumber = ImperialNumberRange.weightWholeNumberRange[row]
+                case 1:
+                    weightInLbsDecimal = ImperialNumberRange.weightDecimalRange[row]
+                default:
+                    break
+                }
+            } else if measurementSystem == .metric {
+                switch component {
+                case 0:
+                    weightInKgWholeNumber = MetricNumberRange.weightWholeNumberRange[row]
+                case 1:
+                    weightInKgDecimal = MetricNumberRange.weightDecimalRange[row]
+                default:
+                    break
+                }
+            }
+        case .heightInput:
+            if measurementSystem == .imperial {
+                switch component {
+                case 0:
+                    heightInFt = ImperialNumberRange.heightInFeetRange[row]
+                case 2:
+                    heightInInches = ImperialNumberRange.heightInInchesRange[row]
+                default:
+                    break
+                }
+            } else if measurementSystem == .metric {
+                switch component {
+                case 0:
+                    heightInMeter = MetricNumberRange.heightInMeterRange
+                case 2:
+                    heightInCentimeter = MetricNumberRange.heightInCentimeterRange[row]
+                default:
+                    break
+                }
+            }
+            
+        case .none:
+            break
+        }
         // save user input
         saveUserInput()
         
@@ -257,35 +342,83 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return inputType == .weightInput ? 3 : 4
     }
     
-        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            if inputType == .weightInput {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch inputType {
+        case .weightInput:
+            if measurementSystem == .imperial {
                 switch component {
                 case 0:
-                    return weightWholeNumberRange.count
+                    return ImperialNumberRange.weightWholeNumberRange.count
                 case 1:
-                    return weightDecimalRange.count
+                    return ImperialNumberRange.weightDecimalRange.count
                 case 2:
                     return 1
                 default:
                     return 1
                 }
-            } else {
+            } else if measurementSystem == .metric {
                 switch component {
                 case 0:
-                    return heightInFeetRange.count
+                    return MetricNumberRange.weightWholeNumberRange.count
                 case 1:
-                    return 1
+                    return MetricNumberRange.weightDecimalRange.count
                 case 2:
-                    return heightInInchesRange.count
+                    return 1
                 default:
                     return 1
                 }
             }
+        case .heightInput:
+            if measurementSystem == .imperial {
+                switch component {
+                case 0:
+                    return ImperialNumberRange.heightInFeetRange.count
+                case 1:
+                    return 1
+                case 2:
+                    return ImperialNumberRange.heightInInchesRange.count
+                default:
+                    return 1
+                }
+            } else if measurementSystem == .metric {
+                switch component {
+                case 0:
+                    return 1
+                case 1:
+                    return 1
+                case 2:
+                    return MetricNumberRange.heightInCentimeterRange.count
+                default:
+                    return 1
+                }
+            }
+        case .none:
+            return 1
         }
-    // MARK: -
+        
+        return 1
+    }
+    
+    // MARK: - SegmentedControl
+    @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            measurementSystem = .imperial
+        case 1:
+            measurementSystem = .metric
+        default:
+            break
+        }
+        
+        updateUI()
+        
+    }
+    
         
     
-    
+    // MARK: -
+
     
     
     

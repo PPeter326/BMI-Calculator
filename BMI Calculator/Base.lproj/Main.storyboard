@@ -96,6 +96,9 @@
                                             <segment title="First"/>
                                             <segment title="Second"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="segmentedControlTouched:" destination="BYZ-38-t0r" eventType="valueChanged" id="JXe-yq-QYn"/>
+                                        </connections>
                                     </segmentedControl>
                                     <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Utc-ml-qvE">
                                         <rect key="frame" x="0.0" y="28" width="394" height="216"/>
