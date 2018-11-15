@@ -17,6 +17,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var BMILabel: UILabel!
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    
     
     // MARK: Model
     var userInput: UserInput?
@@ -47,7 +50,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
-    let weightWholeNumberRange = Array(90...345)
+    let weightWholeNumberRange = Array(90...443)
     let weightDecimalRange = Array(0...9)
     let heightInFeetRange = Array(4...6)
     let heightInInchesRange = Array(0...11)
@@ -80,6 +83,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     
     @IBAction func WeightButtonTouched(_ sender: UIButton? = nil) {
+        // Allows weight input
         if pickerView.isHidden == true {
             activateWeightInput()
         } else {
@@ -89,6 +93,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 activateWeightInput()
             }
         }
+        
+        
+        
     }
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
@@ -138,12 +145,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         // update height and weight input buttons
         switch inputType {
         case .weightInput:
+            // configure weight button
             weightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
-            // update default pickerview value for weight input
+            // configure pickerview for weight input
             pickerView.isHidden = false
             let weightInLbsWholeNumberIndex = weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
             pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
+            // configure segment control
+            segmentedControl.isHidden = false
+            segmentedControl.setTitle("Lbs", forSegmentAt: 0)
+            segmentedControl.setTitle("Kg", forSegmentAt: 1)
         case .heightInput:
             heightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
@@ -153,10 +165,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             let heightInInchIndex = heightInInchesRange.firstIndex(of: heightInInches)!
             pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
             pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
+            // configure segment control
+            segmentedControl.isHidden = false
+            segmentedControl.setTitle("Ft/In", forSegmentAt: 0)
+            segmentedControl.setTitle("M/Cm", forSegmentAt: 1)
         case .none:
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
             pickerView.isHidden = true
+            segmentedControl.isHidden = true
         }
         
         weightButton.setTitle("\(weightInLbs) lbs", for: .normal)

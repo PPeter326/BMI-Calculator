@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina5_9" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,14 +15,14 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BMI_Calculator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="52" translatesAutoresizingMaskIntoConstraints="NO" id="wtm-B0-8Uy">
-                                <rect key="frame" x="10" y="94" width="355" height="348"/>
+                                <rect key="frame" x="10" y="94" width="394" height="348"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="FsJ-lo-AgG">
-                                        <rect key="frame" x="50.666666666666657" y="0.0" width="253.99999999999997" height="148"/>
+                                        <rect key="frame" x="70" y="0.0" width="254" height="148"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="T75-ZZ-dqS">
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="59"/>
@@ -69,16 +69,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="1AI-jm-o5u">
-                                        <rect key="frame" x="90.000000000000014" y="200" width="175.33333333333337" height="148"/>
+                                        <rect key="frame" x="109.5" y="200" width="175.5" height="148"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bmX-EM-HjC">
-                                                <rect key="frame" x="0.0" y="0.0" width="175.33333333333334" height="119.66666666666667"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="175.5" height="119.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="100"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overweight BMI" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xrw-hI-fAS">
-                                                <rect key="frame" x="0.0" y="127.66666666666667" width="175.33333333333334" height="20.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="127.5" width="175.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -87,21 +87,34 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Utc-ml-qvE">
-                                <rect key="frame" x="10" y="552" width="355" height="216"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Fx8-6w-4Sg"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="rkQ-Qd-odd"/>
-                                </connections>
-                            </pickerView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AMI-Fc-oLP">
+                                <rect key="frame" x="10" y="608" width="394" height="244"/>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jTU-AZ-gAi">
+                                        <rect key="frame" x="0.0" y="0.0" width="394" height="29"/>
+                                        <segments>
+                                            <segment title="First"/>
+                                            <segment title="Second"/>
+                                        </segments>
+                                    </segmentedControl>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Utc-ml-qvE">
+                                        <rect key="frame" x="0.0" y="28" width="394" height="216"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="Fx8-6w-4Sg"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="rkQ-Qd-odd"/>
+                                        </connections>
+                                    </pickerView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="wtm-B0-8Uy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9Qn-vU-de9"/>
-                            <constraint firstItem="Utc-ml-qvE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="KYS-Gr-MIT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wtm-B0-8Uy" secondAttribute="trailing" constant="10" id="N7d-Cn-0GW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Utc-ml-qvE" secondAttribute="trailing" constant="10" id="ahR-u2-hf8"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Utc-ml-qvE" secondAttribute="bottom" constant="10" id="qgy-tx-qiU"/>
+                            <constraint firstAttribute="trailing" secondItem="AMI-Fc-oLP" secondAttribute="trailing" constant="10" id="aqq-O2-GdT"/>
+                            <constraint firstItem="AMI-Fc-oLP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="eZx-Iv-jX4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AMI-Fc-oLP" secondAttribute="bottom" constant="10" id="fvD-dS-Vl7"/>
+                            <constraint firstItem="AMI-Fc-oLP" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wtm-B0-8Uy" secondAttribute="bottom" constant="10" id="hjf-AG-hjd"/>
                             <constraint firstItem="wtm-B0-8Uy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="xem-m9-a5o"/>
                             <constraint firstItem="wtm-B0-8Uy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="z58-s5-i2b">
                                 <variation key="heightClass=compact" constant="10"/>
@@ -115,6 +128,7 @@
                         <outlet property="BMILabel" destination="bmX-EM-HjC" id="XUW-rD-IOY"/>
                         <outlet property="heightButton" destination="TJv-fM-TgX" id="z1z-eB-OGR"/>
                         <outlet property="pickerView" destination="Utc-ml-qvE" id="KMq-QG-f35"/>
+                        <outlet property="segmentedControl" destination="jTU-AZ-gAi" id="74M-Ze-jrS"/>
                         <outlet property="weightButton" destination="B5p-J6-aWg" id="rUx-a3-Dtt"/>
                     </connections>
                 </viewController>
