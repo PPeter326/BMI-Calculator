@@ -278,7 +278,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         } else {
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
         }
-        
     }
     
     func updateSegmentedControl() {
@@ -288,21 +287,33 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         case .weightInput:
             segmentedControl.setTitle("Lbs", forSegmentAt: 0)
             segmentedControl.setTitle("Kg", forSegmentAt: 1)
+            if weightInputMeasurement == .imperial {
+                segmentedControl.selectedSegmentIndex = 0
+            } else {
+                segmentedControl.selectedSegmentIndex = 1
+            }
         case .heightInput:
-        segmentedControl.setTitle("Ft/In", forSegmentAt: 0)
-        segmentedControl.setTitle("M/Cm", forSegmentAt: 1)
+            segmentedControl.setTitle("Ft/In", forSegmentAt: 0)
+            segmentedControl.setTitle("M/Cm", forSegmentAt: 1)
+            if heightInputMeasurement == .imperial {
+                segmentedControl.selectedSegmentIndex = 0
+            } else {
+                segmentedControl.selectedSegmentIndex = 1
+            }
         case .none:
             break
         }
+    }
+    
+    func updatePickerView() {
+        
     }
     
     func updateBMILabels() {
         
     }
     
-    func updatePickerView() {
-        
-    }
+    
     
    
     
@@ -483,13 +494,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         case .none:
             return 1
         }
-        
         return 1
     }
     
     // MARK: - SegmentedControl
     @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
-        
         if inputType == .weightInput {
             switch sender.selectedSegmentIndex {
             case 0:
@@ -509,10 +518,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 break
             }
         }
-        
         updateUI()
-        
     }
+
     
         
     
