@@ -12,14 +12,10 @@ struct UserInput: Codable {
     
     var weightInLbs: Double
     var totalHeightInInches: Double
-    var weightInKg: Double
-    var totalHeightInCentimeters: Double
     
     init(weightInLbs: Double, heightInInches: Double) {
         self.weightInLbs = weightInLbs
         self.totalHeightInInches = heightInInches
-        self.weightInKg = weightInLbs.lbToKg
-        self.totalHeightInCentimeters = heightInInches.inchToCentimeter
     }
     
 }
