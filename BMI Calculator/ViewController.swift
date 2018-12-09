@@ -108,7 +108,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         // Initial set up
         inputType = .none
         loadUserInput()
-        updateUI()
+        updateAllUI()
     }
     
 
@@ -118,7 +118,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         // switch out of input mode
         // update UI
         deactivateInput()
-        updateUI()
+        updateAllUI()
     }
     
     
@@ -138,6 +138,39 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
     }
     
+    
+    
+    @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
+        updateInputMeasurement()
+        // reload pickerView to reflect input measurement
+        pickerView.reloadAllComponents()
+        // pickerview select proper values
+        inputType == .weightInput ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
+    }
+    
+    fileprivate func updateInputMeasurement() {
+        // update input measurement
+        if inputType == .weightInput {
+            switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                weightInputMeasurement = .imperial
+            case 1:
+                weightInputMeasurement = .metric
+            default:
+                break
+            }
+        } else if inputType == .heightInput {
+            switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                heightInputMeasurement = .imperial
+            case 1:
+                heightInputMeasurement = .metric
+            default:
+                break
+            }
+        }
+    }
+    
     // MARK: - Input
     
     var inputType: InputType = .none
@@ -153,18 +186,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     private func deactivateInput() {
         inputType = .none
-        updateUI()
+        updateAllUI()
     }
     
     private func activateWeightInput() {
         inputType = .weightInput
-        updateUI()
+        updateAllUI()
         pickerViewSelectsWeight()
     }
     
     private func activateHeightInput() {
         inputType = .heightInput
-        updateUI()
+        updateAllUI()
         pickerViewSelectsHeight()
     }
     
@@ -183,6 +216,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func pickerViewSelectsHeight() {
+        
         if heightInputMeasurement == .imperial {
             let heightInFeetIndex = ImperialNumberRange.heightInFeetRange.firstIndex(of: heightInFt)!
             let heightInInchIndex = ImperialNumberRange.heightInInchesRange.firstIndex(of: heightInInches)!
@@ -197,7 +231,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     // MARK: - UI Update
-    private func updateUI() {
+    private func updateAllUI() {
+        
         updateWeightButton()
         updateHeightButton()
         updateSegmentedControl()
@@ -263,6 +298,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func updatePickerView() {
+        
         pickerView.isHidden = (inputType == .none)
         pickerView.reloadAllComponents()
     }
@@ -287,6 +323,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     // MARK: - PickerView Delegate Methods
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
         switch inputType {
         case .weightInput:
             if weightInputMeasurement == .imperial {
@@ -350,6 +387,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
         switch inputType {
         case .weightInput:
             if weightInputMeasurement == .imperial {
@@ -398,15 +436,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
         // save user input
         saveUserInput()
-//        updateUI()
     }
     
     // MARK: - PickerView Datasource Methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        
         return inputType == .weightInput ? 3 : 4
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        
         switch inputType {
         case .weightInput:
             if weightInputMeasurement == .imperial {
@@ -462,29 +501,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return 1
     }
     
-    // MARK: - SegmentedControl
-    @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
-        if inputType == .weightInput {
-            switch sender.selectedSegmentIndex {
-            case 0:
-                weightInputMeasurement = .imperial
-            case 1:
-                weightInputMeasurement = .metric
-            default:
-                break
-            }
-        } else if inputType == .heightInput {
-            switch sender.selectedSegmentIndex {
-            case 0:
-                heightInputMeasurement = .imperial
-            case 1:
-                heightInputMeasurement = .metric
-            default:
-                break
-            }
-        }
-        updateUI()
-    }
+    
 
     
         
