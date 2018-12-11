@@ -57,7 +57,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
         set {
             weightInKgWholeNumber = Int(newValue)
-            weightInKgDecimal = Int(newValue - Double(weightInKgWholeNumber))
+            let decimalDifference = newValue - Double(weightInKgWholeNumber)
+            let decimalDifferenceInTenths = decimalDifference * 10
+            let decimalDifferenceInTenthsRounded = round(decimalDifferenceInTenths)
+            weightInKgDecimal = Int(decimalDifferenceInTenthsRounded)
         }
     }
     
