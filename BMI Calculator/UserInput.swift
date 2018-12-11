@@ -8,14 +8,22 @@
 
 import Foundation
 
-struct UserInput: Codable {
+struct UserInput: Codable, CustomStringConvertible {
+    var description: String {
+        return "Imperial: \(weightInLbs) lbs \(totalHeightInInches) inches, Metric: \(weightInKgs) kgs, \(totalHeightInCm) cm"
+    }
+    
     
     var weightInLbs: Double
     var totalHeightInInches: Double
+    var weightInKgs: Double
+    var totalHeightInCm: Double
     
-    init(weightInLbs: Double, heightInInches: Double) {
+    init(weightInLbs: Double, heightInInches: Double, weightInKgs: Double, totalHeightInCm: Double) {
         self.weightInLbs = weightInLbs
         self.totalHeightInInches = heightInInches
+        self.weightInKgs = weightInKgs
+        self.totalHeightInCm = totalHeightInCm
     }
     
 }
