@@ -87,15 +87,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             heightInCentimeter = Int(newValue) % 100
         }
     }
+    // MARK: range for height and weight
+    let validHeightRangeInMeters = 1.47...1.91
+    let validWeightRangeInKgs = 41.0...201.0
 
-    struct ImperialNumberRange {
+    struct ImperialNumberPickerViewRange {
         static let weightWholeNumberRange = Array(90...443)
         static let weightDecimalRange = Array(0...9)
         static let heightInFeetRange = Array(4...6)
         static let heightInInchesRange = Array(0...11)
     }
     
-    struct MetricNumberRange {
+    struct MetricNumberPickerViewRange {
         static let weightWholeNumberRange = Array(40...200)
         static let weightDecimalRange = Array(0...9)
         static let heightInMeterRange = 1
@@ -159,6 +162,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         updateHeightButton()
     }
     
+    /// Updates inputType (weight/height input) and input measurement (imperial/metric)
     fileprivate func updateInputMeasurement() {
         // update input measurement
         if inputType == .weightInput {
@@ -214,13 +218,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func pickerViewSelectsWeight() {
         if weightInputMeasurement == .imperial {
-            let weightInLbsWholeNumberIndex = ImperialNumberRange.weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
-            let weightInLbsDecimalIndex = ImperialNumberRange.weightDecimalRange.firstIndex(of: weightInLbsDecimal)!
+            let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weightInLbsWholeNumber)!
+            let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: weightInLbsDecimal)!
             pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
             pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
         } else if weightInputMeasurement == .metric {
-            let weightInKgWholeNumberIndex = MetricNumberRange.weightWholeNumberRange.firstIndex(of: weightInKgWholeNumber)!
-            let weightInKgDecimalIndex = MetricNumberRange.weightDecimalRange.firstIndex(of: weightInKgDecimal)!
+            let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weightInKgWholeNumber)!
+            let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: weightInKgDecimal)!
             pickerView.selectRow(weightInKgWholeNumberIndex, inComponent: 0, animated: false)
             pickerView.selectRow(weightInKgDecimalIndex, inComponent: 1, animated: false)
         }
@@ -229,13 +233,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     func pickerViewSelectsHeight() {
         
         if heightInputMeasurement == .imperial {
-            let heightInFeetIndex = ImperialNumberRange.heightInFeetRange.firstIndex(of: heightInFt)!
-            let heightInInchIndex = ImperialNumberRange.heightInInchesRange.firstIndex(of: heightInInches)!
+            let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: heightInFt)!
+            let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: heightInInches)!
             pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
             pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
         } else if heightInputMeasurement == .metric {
             let heightInMeterIndex = 0
-            let heightInCentimeterIndex = MetricNumberRange.heightInCentimeterRange.firstIndex(of: heightInCentimeter)!
+            let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: heightInCentimeter)!
             pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
             pickerView.selectRow(heightInCentimeterIndex, inComponent: 2, animated: false)
         }
@@ -340,9 +344,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if weightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    return String(ImperialNumberRange.weightWholeNumberRange[row])
+                    return String(ImperialNumberPickerViewRange.weightWholeNumberRange[row])
                 case 1:
-                    return ".\(ImperialNumberRange.weightDecimalRange[row])"
+                    return ".\(ImperialNumberPickerViewRange.weightDecimalRange[row])"
                 case 2:
                     return "lbs"
                 default:
@@ -351,9 +355,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             } else if weightInputMeasurement == .metric {
                 switch component {
                 case 0:
-                    return String(MetricNumberRange.weightWholeNumberRange[row])
+                    return String(MetricNumberPickerViewRange.weightWholeNumberRange[row])
                 case 1:
-                    return ".\(MetricNumberRange.weightDecimalRange[row])"
+                    return ".\(MetricNumberPickerViewRange.weightDecimalRange[row])"
                 case 2:
                     return "kg"
                 default:
@@ -364,11 +368,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if heightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    return String(ImperialNumberRange.heightInFeetRange[row])
+                    return String(ImperialNumberPickerViewRange.heightInFeetRange[row])
                 case 1:
                     return "ft"
                 case 2:
-                    return "\(ImperialNumberRange.heightInInchesRange[row])"
+                    return "\(ImperialNumberPickerViewRange.heightInInchesRange[row])"
                 case 3:
                     return "in"
                 default:
@@ -377,11 +381,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             } else if heightInputMeasurement == .metric {
                 switch component {
                 case 0:
-                    return String(MetricNumberRange.heightInMeterRange)
+                    return String(MetricNumberPickerViewRange.heightInMeterRange)
                 case 1:
                     return "m"
                 case 2:
-                    return "\(MetricNumberRange.heightInCentimeterRange[row])"
+                    return "\(MetricNumberPickerViewRange.heightInCentimeterRange[row])"
                 case 3:
                     return "cm"
                 default:
@@ -404,18 +408,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if weightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    weightInLbsWholeNumber = ImperialNumberRange.weightWholeNumberRange[row]
+                    weightInLbsWholeNumber = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weightInLbsDecimal = ImperialNumberRange.weightDecimalRange[row]
+                    weightInLbsDecimal = ImperialNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
             } else if weightInputMeasurement == .metric {
                 switch component {
                 case 0:
-                    weightInKgWholeNumber = MetricNumberRange.weightWholeNumberRange[row]
+                    weightInKgWholeNumber = MetricNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weightInKgDecimal = MetricNumberRange.weightDecimalRange[row]
+                    weightInKgDecimal = MetricNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
@@ -425,18 +429,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if heightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    heightInFt = ImperialNumberRange.heightInFeetRange[row]
+                    heightInFt = ImperialNumberPickerViewRange.heightInFeetRange[row]
                 case 2:
-                    heightInInches = ImperialNumberRange.heightInInchesRange[row]
+                    heightInInches = ImperialNumberPickerViewRange.heightInInchesRange[row]
                 default:
                     break
                 }
             } else if heightInputMeasurement == .metric {
                 switch component {
                 case 0:
-                    heightInMeter = MetricNumberRange.heightInMeterRange
+                    heightInMeter = MetricNumberPickerViewRange.heightInMeterRange
                 case 2:
-                    heightInCentimeter = MetricNumberRange.heightInCentimeterRange[row]
+                    heightInCentimeter = MetricNumberPickerViewRange.heightInCentimeterRange[row]
                 default:
                     break
                 }
@@ -462,9 +466,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if weightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    return ImperialNumberRange.weightWholeNumberRange.count
+                    return ImperialNumberPickerViewRange.weightWholeNumberRange.count
                 case 1:
-                    return ImperialNumberRange.weightDecimalRange.count
+                    return ImperialNumberPickerViewRange.weightDecimalRange.count
                 case 2:
                     return 1
                 default:
@@ -473,9 +477,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             } else if weightInputMeasurement == .metric {
                 switch component {
                 case 0:
-                    return MetricNumberRange.weightWholeNumberRange.count
+                    return MetricNumberPickerViewRange.weightWholeNumberRange.count
                 case 1:
-                    return MetricNumberRange.weightDecimalRange.count
+                    return MetricNumberPickerViewRange.weightDecimalRange.count
                 case 2:
                     return 1
                 default:
@@ -486,11 +490,11 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             if heightInputMeasurement == .imperial {
                 switch component {
                 case 0:
-                    return ImperialNumberRange.heightInFeetRange.count
+                    return ImperialNumberPickerViewRange.heightInFeetRange.count
                 case 1:
                     return 1
                 case 2:
-                    return ImperialNumberRange.heightInInchesRange.count
+                    return ImperialNumberPickerViewRange.heightInInchesRange.count
                 default:
                     return 1
                 }
@@ -501,7 +505,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                 case 1:
                     return 1
                 case 2:
-                    return MetricNumberRange.heightInCentimeterRange.count
+                    return MetricNumberPickerViewRange.heightInCentimeterRange.count
                 default:
                     return 1
                 }
@@ -608,18 +612,59 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     /// - Returns: BMI (Double) if weight and height data are valid.  Returns nil otherwise
     func calculateBMI() -> Double? {
         
+        // validate weight data (separate) -> return validated weight data (regardless of measurement system) converted to metric system
+        // validate height data (separate) -> return validated height data converted to metric system
+        // calculate BMI
+        
+        guard let weight = validatedWeight() else { return nil }
+        guard let heightInMeter = validatedHeight() else { return nil }
+        let BMI = weight / (heightInMeter * heightInMeter)
+        let roundedBMI = roundToOnewDecimal(BMI)
+        return roundedBMI
+        
         // Validate weight and height data
-        if validHeightAndWeight() {
-            let heightInMeter = totalHeightInInches.inchToMeter
-            let weightInKg = weightInLbs.lbToKg
-            let BMI = weightInKg / (heightInMeter * heightInMeter)
-            let roundedBMI = roundToOnewDecimal(BMI)
-            return roundedBMI
-        } else {
-            return nil
-        }
+//        if validImperialHeightAndWeight() {
+//            let heightInMeter = totalHeightInInches.inchToMeter
+//            let weightInKg = weightInLbs.lbToKg
+//            let BMI = weightInKg / (heightInMeter * heightInMeter)
+//            let roundedBMI = roundToOnewDecimal(BMI)
+//            return roundedBMI
+//        } else {
+//            return nil
+//        }
         
     }
+    
+    private func validatedWeight() -> Double? {
+        let weight = getWeightValue()
+        return validWeightRangeInKgs.contains(weight) ? weight : nil
+    }
+    
+    private func getWeightValue() -> Double {
+        // if imperial -> return converted weight
+        // if metric -> return self
+        switch weightInputMeasurement {
+        case .imperial:
+            return weightInLbs.lbToKg
+        case .metric:
+            return weightInKgs
+        }
+    }
+    private func validatedHeight() -> Double? {
+        let height = getHeightValue()
+        return validHeightRangeInMeters.contains(height) ? height : nil
+    }
+    
+    private func getHeightValue() -> Double {
+        switch heightInputMeasurement {
+        case .imperial:
+            return totalHeightInInches.inchToMeter
+        case .metric:
+            return totalHeightCentimeters / 100
+        }
+    }
+    
+    
     /// This method takes a double amount and round to the nearest 1 decimal point
     ///
     /// - Parameter amount: an amount in double
@@ -633,7 +678,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     /// 1. Not Empty
     /// 2. Within valid range
     /// - Returns: true if weight and height are not empty and are within valid range; false otherwise
-    func validHeightAndWeight() -> Bool {
+    func validImperialHeightAndWeight() -> Bool {
         
         // Check weight and height to make sure it's within valid range
         let validHeightRangeInInches = 58.0...76.0
