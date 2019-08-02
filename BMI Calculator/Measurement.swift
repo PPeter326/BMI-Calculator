@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Model for height and weight
+
 struct Measurement: Codable, CustomStringConvertible {
     
     var description: String {
