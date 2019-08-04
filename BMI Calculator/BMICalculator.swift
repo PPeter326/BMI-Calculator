@@ -12,21 +12,16 @@ struct BMICalculator {
     
     // MARK: - Calculations
     
-    /// Calculates BMI based on value stored in weightInLbs, heightInFt, and heightInInches
-    /// if the value are within height and weight range established in NIH BMI table
+    /// Calculates BMI based on weight in kg and height in meters.
+    /// Precondition: the values are within height and weight range established in NIH BMI table
     ///
     /// - Returns: BMI (Double) if weight and height data are valid.  Returns nil otherwise
     func calculateBMI(weight: Double, height: Double ) -> Double? {
         
-        // validate weight data (separate) -> return validated weight data (regardless of measurement system) converted to metric system
-        // validate height data (separate) -> return validated height data converted to metric system
-        // calculate BMI
-        
         guard let weight = validatedWeight(weight: weight) else { return nil }
         guard let heightInMeter = validatedHeight(height: height) else { return nil }
         let BMI = weight / (heightInMeter * heightInMeter)
-        let roundedBMI = roundToOnewDecimal(BMI)
-        return roundedBMI
+        return BMI
     }
         
     private func validatedWeight(weight: Double) -> Double? {
@@ -45,11 +40,4 @@ struct BMICalculator {
     let validHeightRangeInMeters = 1.47...1.91
     let validWeightRangeInKgs = 41.0...201.0
     
-    /// This method takes a double amount and round to the nearest 1 decimal point
-    ///
-    /// - Parameter amount: an amount in double
-    /// - Returns: amount rounded to the nearest 1 decimal point
-    private func roundToOnewDecimal(_ amount: Double) -> Double {
-        return round(amount * 10)/10
-    }
 }

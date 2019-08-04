@@ -103,7 +103,14 @@ class ViewController: UIViewController {
         static let heightInCentimeterRange = Array(40...99)
     }
     
-    // MARK: BMI
+    // MARK: - Formatter
+    let numberFormatter: NumberFormatter = {
+       let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 1
+        return formatter
+    }()
+    
+    // MARK: - BMI
     
     var calculator = BMICalculator()
     var BMI: Double? {
@@ -343,7 +350,7 @@ class ViewController: UIViewController {
     func updateBMILabels() {
         // update BMI Label
         if let BMI = BMI, let BMIDescription = BMIDescription {
-            BMILabel.text = "\(BMI)"
+            BMILabel.text = numberFormatter.string(from: NSNumber(value: BMI))
             BMICategoryLabel.text = "\(BMIDescription)"
         } else {
             BMILabel.text = "N/A"
@@ -579,6 +586,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
 extension ViewController {
     
+    // MARK: - Input State Management
     /// There are three mutually exclusive state.  Either the user is inputting weight, or inputting height, or simply viewing (none).  InputState enum
     /// encapsulates these mutually exclusive state.
     ///

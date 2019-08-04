@@ -44,7 +44,7 @@ struct Measurement: Codable, CustomStringConvertible {
         // write data to archive url
         let propertyListEncoder = PropertyListEncoder()
         if let encodedMeasurement = try? propertyListEncoder.encode(measurement) {
-            try? encodedMeasurement.write(to: archiveURL, options: .completeFileProtection)
+            try? encodedMeasurement.write(to: archiveURL, options: .noFileProtection)
         }
     }
     
