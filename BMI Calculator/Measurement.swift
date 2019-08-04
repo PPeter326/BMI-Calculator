@@ -28,29 +28,33 @@ struct Measurement: Codable, CustomStringConvertible {
         self.totalHeightInCm = totalHeightInCm
     }
     
+    
+    /// Builds the url to the archived file location, which resides in the standard application document directory.  The file is named "measurement.plist".
     static var archiveURL: URL = {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let archiveURL = documentDirectory.appendingPathComponent("measurement").appendingPathExtension("plist")
         return archiveURL
     }()
     
-    static let propertyListEncoder = PropertyListEncoder()
-    
-    static let propertyListDecoder = PropertyListDecoder()
-    
+    /// Encodes measurement into Plist data file, and said data file to archiveURL
+    ///
+    /// - Parameter measurement: Measurement struct, which is Codable
     static func saveToFile(measurement: Measurement) {
-        // build archive url to document directory
         // encode Measurement to data object
         // write data to archive url
+        let propertyListEncoder = PropertyListEncoder()
         if let encodedMeasurement = try? propertyListEncoder.encode(measurement) {
-            try? encodedMeasurement.write(to: archiveURL, options: .noFileProtection)
+            try? encodedMeasurement.write(to: archiveURL, options: .completeFileProtection)
         }
     }
     
+    /// Retrieves data from archiveURL, then decode said data into Measurement struct using property list decoder
+    ///
+    /// - Returns: Measurement? could be nil if data could not be loaded, or if the data loaded could not be properly decoded using property list decoder
     static func loadFromFile() -> Measurement? {
-        // build url to file
         // create data from url
         // create Measurement object from data
+        let propertyListDecoder = PropertyListDecoder()
         if let data = try? Data(contentsOf: archiveURL), let measurement = try? propertyListDecoder.decode(Measurement.self, from: data) {
             return measurement
         } else {
@@ -59,6 +63,9 @@ struct Measurement: Codable, CustomStringConvertible {
 
     }
 
+    /// Initializes a Measurement struct with predefined sample weight and height data
+    ///
+    /// - Returns: Measurement struct with predefined sample weight and height data
     static func loadSampleMeasurement() -> Measurement {
         let sampleMeasurement = Measurement(weightInLbs: 170, heightInInches: 72, weightInKgs: 83, totalHeightInCm: 170)
         return sampleMeasurement
