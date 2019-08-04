@@ -117,7 +117,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // Initial set up
-        inputType = .none
+        inputState = .none
         if let measurement = Measurement.loadFromFile() {
             userInput = measurement
         } else {
@@ -138,7 +138,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func WeightButtonTouched(_ sender: UIButton? = nil) {
-        if inputType == .weightInput {
+        if inputState == .weightInput {
             deactivateInput()
         } else {
             activateWeightInput()
@@ -146,7 +146,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
-        if inputType == .heightInput {
+        if inputState == .heightInput {
             deactivateInput()
         } else {
             activateHeightInput()
@@ -160,7 +160,7 @@ class ViewController: UIViewController {
         // reload pickerView to reflect input measurement
         pickerView.reloadAllComponents()
         // pickerview select proper values
-        inputType == .weightInput ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
+        inputState == .weightInput ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
         // update weight/height button
         updateWeightButton()
         updateHeightButton()
@@ -169,7 +169,7 @@ class ViewController: UIViewController {
     /// Updates inputType (weight/height input) and input measurement (imperial/metric)
     fileprivate func updateInputMeasurement() {
         // update input measurement
-        if inputType == .weightInput {
+        if inputState == .weightInput {
             switch segmentedControl.selectedSegmentIndex {
             case 0:
                 weightInputMeasurement = .imperial
@@ -178,7 +178,7 @@ class ViewController: UIViewController {
             default:
                 break
             }
-        } else if inputType == .heightInput {
+        } else if inputState == .heightInput {
             switch segmentedControl.selectedSegmentIndex {
             case 0:
                 heightInputMeasurement = .imperial
@@ -192,30 +192,26 @@ class ViewController: UIViewController {
     
     // MARK: - Input
     
-    var inputType: InputType = .none
+    private var inputState: InputState = .none
 //    var measurementSystem: MeasurementSystem = .imperial
     var weightInputMeasurement: MeasurementSystem = .imperial
     var heightInputMeasurement: MeasurementSystem = .imperial
     
-    enum InputType {
-        case weightInput
-        case heightInput
-        case none
-    }
+    
     
     private func deactivateInput() {
-        inputType = .none
+        inputState = .none
         updateAllUI()
     }
     
     private func activateWeightInput() {
-        inputType = .weightInput
+        inputState = .weightInput
         updateAllUI()
         pickerViewSelectsWeight()
     }
     
     private func activateHeightInput() {
-        inputType = .heightInput
+        inputState = .heightInput
         updateAllUI()
         pickerViewSelectsHeight()
     }
@@ -261,7 +257,7 @@ class ViewController: UIViewController {
     
     func updateWeightButton() {
         // update button title color depending on input state
-        if inputType == .weightInput {
+        if inputState == .weightInput {
             weightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
@@ -277,7 +273,7 @@ class ViewController: UIViewController {
     
     func updateHeightButton() {
         // update button title color depending on input state
-        if inputType == .heightInput {
+        if inputState == .heightInput {
             heightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
@@ -292,9 +288,9 @@ class ViewController: UIViewController {
     }
     
     func updateSegmentedControl() {
-        segmentedControl.isHidden = (inputType == .none)
+        segmentedControl.isHidden = (inputState == .none)
         
-        switch inputType  {
+        switch inputState  {
         case .weightInput:
             segmentedControl.setTitle("Lbs", forSegmentAt: 0)
             segmentedControl.setTitle("Kg", forSegmentAt: 1)
@@ -318,7 +314,7 @@ class ViewController: UIViewController {
     
     func updatePickerView() {
         
-        pickerView.isHidden = (inputType == .none)
+        pickerView.isHidden = (inputState == .none)
         pickerView.reloadAllComponents()
     }
     
@@ -471,7 +467,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     // MARK: - PickerView Delegate Methods
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
-        switch inputType {
+        switch inputState {
         case .weightInput:
             if weightInputMeasurement == .imperial {
                 switch component {
@@ -535,7 +531,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        switch inputType {
+        switch inputState {
         case .weightInput:
             if weightInputMeasurement == .imperial {
                 switch component {
@@ -588,12 +584,12 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     // MARK: - PickerView Datasource Methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         
-        return inputType == .weightInput ? 3 : 4
+        return inputState == .weightInput ? 3 : 4
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
-        switch inputType {
+        switch inputState {
         case .weightInput:
             if weightInputMeasurement == .imperial {
                 switch component {
@@ -649,4 +645,16 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
+
+extension ViewController {
+    
+    /// There are three mutually exclusive state.  Either the user is inputting weight, or inputting height, or simply viewing (none).  InputState enum
+    /// encapsulates these mutually exclusive state.
+    ///
+    enum InputState {
+        case weightInput
+        case heightInput
+        case none
+    }
+}
 
