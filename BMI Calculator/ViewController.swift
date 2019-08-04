@@ -87,9 +87,7 @@ class ViewController: UIViewController {
             heightInCentimeter = Int(newValue) % 100
         }
     }
-    // MARK: range for height and weight
-    let validHeightRangeInMeters = 1.47...1.91
-    let validWeightRangeInKgs = 41.0...201.0
+    
 
     struct ImperialNumberPickerViewRange {
         static let weightWholeNumberRange = Array(90...443)
@@ -106,9 +104,33 @@ class ViewController: UIViewController {
     }
     
     // MARK: BMI
+    
+    var calculator = BMICalculator()
     var BMI: Double? {
-        return calculateBMI()
+      return calculator.calculateBMI(weight: getWeightValue(), height: getHeightValue())
     }
+    
+    private func getWeightValue() -> Double {
+        // if imperial -> return converted weight
+        // if metric -> return self
+        switch weightInputMeasurement {
+        case .imperial:
+            return weightInLbs.lbToKg
+        case .metric:
+            return weightInKgs
+        }
+    }
+    
+    private func getHeightValue() -> Double {
+        switch heightInputMeasurement {
+        case .imperial:
+            return totalHeightInInches.inchToMeter
+        case .metric:
+            return totalHeightCentimeters / 100
+        }
+    }
+    
+    
     var BMIDescription: String? {
         return BMI != nil ? category(of: BMI!).describe() : nil
     }
@@ -330,97 +352,6 @@ class ViewController: UIViewController {
     }
     
     
-    
-   
-    
-   
-    
-    
-    
-    
-    
-    // MARK: - Calculations
-    
-    /// Calculates BMI based on value stored in weightInLbs, heightInFt, and heightInInches
-    /// if the value are within height and weight range established in NIH BMI table
-    ///
-    /// - Returns: BMI (Double) if weight and height data are valid.  Returns nil otherwise
-    func calculateBMI() -> Double? {
-        
-        // validate weight data (separate) -> return validated weight data (regardless of measurement system) converted to metric system
-        // validate height data (separate) -> return validated height data converted to metric system
-        // calculate BMI
-        
-        guard let weight = validatedWeight() else { return nil }
-        guard let heightInMeter = validatedHeight() else { return nil }
-        let BMI = weight / (heightInMeter * heightInMeter)
-        let roundedBMI = roundToOnewDecimal(BMI)
-        return roundedBMI
-        
-        // Validate weight and height data
-//        if validImperialHeightAndWeight() {
-//            let heightInMeter = totalHeightInInches.inchToMeter
-//            let weightInKg = weightInLbs.lbToKg
-//            let BMI = weightInKg / (heightInMeter * heightInMeter)
-//            let roundedBMI = roundToOnewDecimal(BMI)
-//            return roundedBMI
-//        } else {
-//            return nil
-//        }
-        
-    }
-    
-    private func validatedWeight() -> Double? {
-        let weight = getWeightValue()
-        return validWeightRangeInKgs.contains(weight) ? weight : nil
-    }
-    
-    private func getWeightValue() -> Double {
-        // if imperial -> return converted weight
-        // if metric -> return self
-        switch weightInputMeasurement {
-        case .imperial:
-            return weightInLbs.lbToKg
-        case .metric:
-            return weightInKgs
-        }
-    }
-    private func validatedHeight() -> Double? {
-        let height = getHeightValue()
-        return validHeightRangeInMeters.contains(height) ? height : nil
-    }
-    
-    private func getHeightValue() -> Double {
-        switch heightInputMeasurement {
-        case .imperial:
-            return totalHeightInInches.inchToMeter
-        case .metric:
-            return totalHeightCentimeters / 100
-        }
-    }
-    
-    
-    /// This method takes a double amount and round to the nearest 1 decimal point
-    ///
-    /// - Parameter amount: an amount in double
-    /// - Returns: amount rounded to the nearest 1 decimal point
-    func roundToOnewDecimal(_ amount: Double) -> Double {
-        return round(amount * 10)/10
-    }
-    
-    
-    /// Checks weightInLbs and height sum from heightInFt and heightInInches to make sure they're:
-    /// 1. Not Empty
-    /// 2. Within valid range
-    /// - Returns: true if weight and height are not empty and are within valid range; false otherwise
-    func validImperialHeightAndWeight() -> Bool {
-        
-        // Check weight and height to make sure it's within valid range
-        let validHeightRangeInInches = 58.0...76.0
-        let validWeightRangeInLbs = 91.0...443.0
-        
-        return validWeightRangeInLbs.contains(weightInLbs) && validHeightRangeInInches.contains(totalHeightInInches) ? true : false
-    }
     
     func category(of BMI: Double) -> BMICategory {
         switch BMI {
