@@ -33,11 +33,11 @@ struct BMICalculator {
     }
     
     // Valid weight and height ranges in lbs and inches
-    let validHeightRangeInInches = 58.0...76.0
-    let validWeightRangeInLbs = 91.0...443.0
+    private let validHeightRangeInInches = 58.0...76.0
+    private let validWeightRangeInLbs = 91.0...443.0
     
     // Valid weight and height ranges in meters and kgs
-    let validHeightRangeInMeters = 1.47...1.91
-    let validWeightRangeInKgs = 41.0...201.0
+    private let validHeightRangeInMeters = 1.47...1.91
+    private let validWeightRangeInKgs = 41.0...201.0
     
 }

@@ -95,10 +95,10 @@
 			isa = PBXGroup;
 			children = (
 				F9855F51219CA33F00B81605 /* Measurement.swift */,
+				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F9855F53219E39B200B81605 /* Utility.swift */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
 				F9505B1521574D87003E7E62 /* ViewController.swift */,
-				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F9505B1721574D87003E7E62 /* Main.storyboard */,
 				F9505B1A21574D89003E7E62 /* Assets.xcassets */,
 				F9505B1C21574D89003E7E62 /* LaunchScreen.storyboard */,
