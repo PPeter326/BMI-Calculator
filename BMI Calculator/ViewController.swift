@@ -656,5 +656,14 @@ extension ViewController {
         case heightInput
         case none
     }
+    
+    /// Enum for categorizing two types of input.  An input is either metric or imperial system.
+    ///
+    /// - metric: represents metric system input
+    /// - imperial: represents imperial system input
+    enum MeasurementSystem: Int, Codable {
+        case metric
+        case imperial
+    }
 }
 

@@ -8,17 +8,6 @@
 
 import Foundation
 
-
-/// Enum for categorizing two types of input.  An input is either metric or imperial system.
-///
-/// - metric: represents metric system input
-/// - imperial: represents imperial system input
-enum MeasurementSystem: Int, Codable {
-    
-    case metric
-    case imperial
-}
-
 extension Double {
     
     /// calculates kilogram equivalent of pound
