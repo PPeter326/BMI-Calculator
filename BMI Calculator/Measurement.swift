@@ -30,7 +30,7 @@ struct Measurement: Codable, CustomStringConvertible {
     
     
     /// Builds the url to the archived file location, which resides in the standard application document directory.  The file is named "measurement.plist".
-    static var archiveURL: URL = {
+    private static var archiveURL: URL = {
         let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let archiveURL = documentDirectory.appendingPathComponent("measurement").appendingPathExtension("plist")
         return archiveURL
@@ -44,7 +44,7 @@ struct Measurement: Codable, CustomStringConvertible {
         // write data to archive url
         let propertyListEncoder = PropertyListEncoder()
         if let encodedMeasurement = try? propertyListEncoder.encode(measurement) {
-            try? encodedMeasurement.write(to: archiveURL, options: .noFileProtection)
+            try? encodedMeasurement.write(to: archiveURL, options: .completeFileProtection)
         }
     }
     
