@@ -55,11 +55,11 @@ class InputCoordinator {
         mode = .Inputting
     }
     
-    /// Updates inputType (weight/height input) and input measurement (imperial/metric)
-    func updateInputMeasurement(forSelectedSegmentIndex: Int) {
+    /// Updates inputType (weight/height input) and input measurement (imperial/metric) given index
+    func updateInputMeasurement(forIndex index: Int) {
         // update input measurement
         if activeInputContext!.bodyMeasurement == .weight {
-            switch forSelectedSegmentIndex {
+            switch index {
             case 0:
                 activeInputContext!.measurementSystem = .imperial
             case 1:
@@ -68,7 +68,7 @@ class InputCoordinator {
                 break
             }
         } else {
-            switch forSelectedSegmentIndex {
+            switch index {
             case 0:
                 activeInputContext!.measurementSystem = .imperial
             case 1:
