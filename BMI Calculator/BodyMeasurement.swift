@@ -18,13 +18,13 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
     
     var weightInLbs: Measurement<UnitMass>
     var totalHeightInInches: Double
-    var weightInKgs: Double
+    var weightInKgs: Measurement<UnitMass>
     var totalHeightInCm: Double
     
     init(weightInLbs: Double, heightInInches: Double, weightInKgs: Double, totalHeightInCm: Double) {
         self.weightInLbs = Measurement(value: weightInLbs, unit: UnitMass.pounds)
         self.totalHeightInInches = heightInInches
-        self.weightInKgs = weightInKgs
+        self.weightInKgs = Measurement(value: weightInKgs, unit: UnitMass.kilograms)
         self.totalHeightInCm = totalHeightInCm
     }
     
@@ -36,7 +36,7 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
         return archiveURL
     }()
     
-    /// Encodes measurement into Plist data file, and said data file to archiveURL
+    /// Encodes measurement into Plist data file, and saves data file to archiveURL
     ///
     /// - Parameter measurement: Measurement struct, which is Codable
     static func saveToFile(measurement: BodyMeasurement) {
