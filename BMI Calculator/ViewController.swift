@@ -29,12 +29,12 @@ class ViewController: UIViewController {
     */
     private var userInput: BodyMeasurement {
         get {
-            return BodyMeasurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches.value, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters.value)
+            return BodyMeasurement(weightInLbs: weight.weightInLbs.value, heightInInches: height.totalHeightInInches.value, weightInKgs: weight.weightInKgs.value, totalHeightInCm: height.totalHeightCentimeters.value)
         }
         set {
-            weight.weightInLbs = newValue.weightInLbs.value
+            weight.weightInLbs = newValue.weightInLbs
             height.totalHeightInInches = newValue.totalHeightInInches
-            weight.weightInKgs = newValue.weightInKgs.value
+            weight.weightInKgs = newValue.weightInKgs
             height.totalHeightCentimeters = newValue.totalHeightInCm
         }
     }
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     // MARK: - Weight/Height Input
     
     /// Keeps track of the height/weight values selected by user on pickerview, and stores the value of height/weight from Measurement Data Model.
-    private var weight = Weight()
+    private var weight = WeightPickerData()
     private var height = HeightPickerData()
     
 
@@ -80,9 +80,9 @@ class ViewController: UIViewController {
         let context = inputCoordinator.weightContext
         switch context.measurementSystem {
         case .imperial:
-            return weight.weightInLbs.lbToKg
+            return weight.weightInLbs.converted(to: UnitMass.kilograms).value
         case .metric:
-            return weight.weightInKgs
+            return weight.weightInKgs.value
         }
     }
     
@@ -167,13 +167,13 @@ class ViewController: UIViewController {
     private func pickerViewSelectsWeight() {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
             if activeContext.measurementSystem == .imperial {
-                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.weightInLbsWholeNumber)!
-                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.weightInLbsDecimal)!
+                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.poundsComponent)!
+                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.poundsDecimalComponent)!
                 pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
             } else {
-                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.weightInKgWholeNumber)!
-                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.weightInKgDecimal)!
+                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.kilogramComponent)!
+                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.kilogramDecimalComponent)!
                 pickerView.selectRow(weightInKgWholeNumberIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(weightInKgDecimalIndex, inComponent: 1, animated: false)
             }
@@ -221,9 +221,9 @@ class ViewController: UIViewController {
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.weightContext.measurementSystem {
         case .imperial:
-            weightButton.setTitle("\(weight.weightInLbs) lbs", for: .normal)
+            weightButton.setTitle("\(weight.poundsComponent).\(weight.poundsDecimalComponent) lbs", for: .normal)
         case .metric:
-            weightButton.setTitle("\(weight.weightInKgs) kg", for: .normal)
+            weightButton.setTitle("\(weight.kilogramComponent).\(weight.kilogramDecimalComponent) kg", for: .normal)
         }
     }
     
@@ -366,18 +366,18 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             if currentContext.measurementSystem == .imperial {
                 switch component {
                 case 0:
-                    weight.weightInLbsWholeNumber = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
+                    weight.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weight.weightInLbsDecimal = ImperialNumberPickerViewRange.weightDecimalRange[row]
+                    weight.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
             } else {
                 switch component {
                 case 0:
-                    weight.weightInKgWholeNumber = MetricNumberPickerViewRange.weightWholeNumberRange[row]
+                    weight.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weight.weightInKgDecimal = MetricNumberPickerViewRange.weightDecimalRange[row]
+                    weight.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
