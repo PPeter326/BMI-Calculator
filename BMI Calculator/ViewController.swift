@@ -123,7 +123,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func WeightButtonTouched(_ sender: UIButton? = nil) {
-        if inputCoordinator.currentInputContext() != nil {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
             inputCoordinator.deactivateInput()
             updateAllUI()
         } else {
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
-        if inputCoordinator.currentInputContext() != nil {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
             inputCoordinator.deactivateInput()
             updateAllUI()
         } else {
