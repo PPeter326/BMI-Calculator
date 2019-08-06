@@ -19,7 +19,7 @@
 		F9505B1921574D87003E7E62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1721574D87003E7E62 /* Main.storyboard */; };
 		F9505B1B21574D89003E7E62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1A21574D89003E7E62 /* Assets.xcassets */; };
 		F9505B1E21574D89003E7E62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1C21574D89003E7E62 /* LaunchScreen.storyboard */; };
-		F9855F52219CA33F00B81605 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F51219CA33F00B81605 /* Measurement.swift */; };
+		F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F51219CA33F00B81605 /* BodyMeasurement.swift */; };
 		F9855F54219E39B200B81605 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F53219E39B200B81605 /* Utility.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 		F9505B1A21574D89003E7E62 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9505B1D21574D89003E7E62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9505B1F21574D89003E7E62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F9855F51219CA33F00B81605 /* Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
+		F9855F51219CA33F00B81605 /* BodyMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMeasurement.swift; sourceTree = "<group>"; };
 		F9855F53219E39B200B81605 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +100,7 @@
 		F9505B1221574D87003E7E62 /* BMI Calculator */ = {
 			isa = PBXGroup;
 			children = (
-				F9855F51219CA33F00B81605 /* Measurement.swift */,
+				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F91F2A5122F8FF5100EB499B /* Weight.swift */,
 				F91F2A5322F9072100EB499B /* Height.swift */,
@@ -229,7 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
-				F9855F52219CA33F00B81605 /* Measurement.swift in Sources */,
+				F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */,
 				F91F2A5422F9072100EB499B /* Height.swift in Sources */,
 				F905973922F7375B00329E71 /* BMICalculator.swift in Sources */,
 				F91F2A5622F90B6500EB499B /* BMI.swift in Sources */,

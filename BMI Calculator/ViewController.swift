@@ -27,12 +27,12 @@ class ViewController: UIViewController {
      
     When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
     */
-    private var userInput: Measurement {
+    private var userInput: BodyMeasurement {
         get {
-            return Measurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
+            return BodyMeasurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
         }
         set {
-            weight.weightInLbs = newValue.weightInLbs
+            weight.weightInLbs = newValue.weightInLbs.value
             height.totalHeightInInches = newValue.totalHeightInInches
             weight.weightInKgs = newValue.weightInKgs
             height.totalHeightCentimeters = newValue.totalHeightInCm
@@ -104,10 +104,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // Initial set up
-        if let measurement = Measurement.loadFromFile() {
+        if let measurement = BodyMeasurement.loadFromFile() {
             userInput = measurement
         } else {
-            userInput = Measurement.loadSampleMeasurement()
+            userInput = BodyMeasurement.loadSampleMeasurement()
         }
         updateAllUI()
     }
@@ -406,7 +406,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             updateHeightButton()
         }
         // save user input
-        Measurement.saveToFile(measurement: userInput)
+        BodyMeasurement.saveToFile(measurement: userInput)
     }
     
     // MARK: PickerView Datasource Methods

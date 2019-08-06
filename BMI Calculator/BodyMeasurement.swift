@@ -10,19 +10,19 @@ import Foundation
 
 // Model for height and weight
 
-struct Measurement: Codable, CustomStringConvertible {
+struct BodyMeasurement: Codable, CustomStringConvertible {
     
     var description: String {
         return "Imperial: \(weightInLbs) lbs \(totalHeightInInches) inches, Metric: \(weightInKgs) kgs, \(totalHeightInCm) cm"
     }
     
-    var weightInLbs: Double
+    var weightInLbs: Measurement<UnitMass>
     var totalHeightInInches: Double
     var weightInKgs: Double
     var totalHeightInCm: Double
     
     init(weightInLbs: Double, heightInInches: Double, weightInKgs: Double, totalHeightInCm: Double) {
-        self.weightInLbs = weightInLbs
+        self.weightInLbs = Measurement(value: weightInLbs, unit: UnitMass.pounds)
         self.totalHeightInInches = heightInInches
         self.weightInKgs = weightInKgs
         self.totalHeightInCm = totalHeightInCm
@@ -39,7 +39,7 @@ struct Measurement: Codable, CustomStringConvertible {
     /// Encodes measurement into Plist data file, and said data file to archiveURL
     ///
     /// - Parameter measurement: Measurement struct, which is Codable
-    static func saveToFile(measurement: Measurement) {
+    static func saveToFile(measurement: BodyMeasurement) {
         // encode Measurement to data object
         // write data to archive url
         let propertyListEncoder = PropertyListEncoder()
@@ -51,11 +51,11 @@ struct Measurement: Codable, CustomStringConvertible {
     /// Retrieves data from archiveURL, then decode said data into Measurement struct using property list decoder
     ///
     /// - Returns: Measurement? could be nil if data could not be loaded, or if the data loaded could not be properly decoded using property list decoder
-    static func loadFromFile() -> Measurement? {
+    static func loadFromFile() -> BodyMeasurement? {
         // create data from url
         // create Measurement object from data
         let propertyListDecoder = PropertyListDecoder()
-        if let data = try? Data(contentsOf: archiveURL), let measurement = try? propertyListDecoder.decode(Measurement.self, from: data) {
+        if let data = try? Data(contentsOf: archiveURL), let measurement = try? propertyListDecoder.decode(BodyMeasurement.self, from: data) {
             return measurement
         } else {
             return nil
@@ -66,8 +66,8 @@ struct Measurement: Codable, CustomStringConvertible {
     /// Initializes a Measurement struct with predefined sample weight and height data
     ///
     /// - Returns: Measurement struct with predefined sample weight and height data
-    static func loadSampleMeasurement() -> Measurement {
-        let sampleMeasurement = Measurement(weightInLbs: 170, heightInInches: 72, weightInKgs: 83, totalHeightInCm: 170)
+    static func loadSampleMeasurement() -> BodyMeasurement {
+        let sampleMeasurement = BodyMeasurement(weightInLbs: 170, heightInInches: 72, weightInKgs: 83, totalHeightInCm: 170)
         return sampleMeasurement
     }
     
