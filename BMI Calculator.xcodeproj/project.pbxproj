@@ -12,6 +12,7 @@
 		F905973722F72A6D00329E71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
 		F905973922F7375B00329E71 /* BMICalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F905973822F7375B00329E71 /* BMICalculator.swift */; };
 		F91F2A5222F8FF5100EB499B /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5122F8FF5100EB499B /* Weight.swift */; };
+		F91F2A5422F9072100EB499B /* Height.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5322F9072100EB499B /* Height.swift */; };
 		F9505B1421574D87003E7E62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1321574D87003E7E62 /* AppDelegate.swift */; };
 		F9505B1621574D87003E7E62 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
 		F9505B1921574D87003E7E62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1721574D87003E7E62 /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 		F905972822F4BACB00329E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F905973822F7375B00329E71 /* BMICalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMICalculator.swift; sourceTree = "<group>"; };
 		F91F2A5122F8FF5100EB499B /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
+		F91F2A5322F9072100EB499B /* Height.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Height.swift; sourceTree = "<group>"; };
 		F9505B1021574D87003E7E62 /* BMI Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BMI Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9505B1321574D87003E7E62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9505B1521574D87003E7E62 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
 				F9505B1521574D87003E7E62 /* ViewController.swift */,
 				F91F2A5122F8FF5100EB499B /* Weight.swift */,
+				F91F2A5322F9072100EB499B /* Height.swift */,
 				F9505B1721574D87003E7E62 /* Main.storyboard */,
 				F9505B1A21574D89003E7E62 /* Assets.xcassets */,
 				F9505B1C21574D89003E7E62 /* LaunchScreen.storyboard */,
@@ -224,6 +227,7 @@
 			files = (
 				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
 				F9855F52219CA33F00B81605 /* Measurement.swift in Sources */,
+				F91F2A5422F9072100EB499B /* Height.swift in Sources */,
 				F905973922F7375B00329E71 /* BMICalculator.swift in Sources */,
 				F9505B1621574D87003E7E62 /* ViewController.swift in Sources */,
 				F9505B1421574D87003E7E62 /* AppDelegate.swift in Sources */,

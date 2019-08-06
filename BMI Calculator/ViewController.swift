@@ -30,13 +30,13 @@ class ViewController: UIViewController {
     */
     private var userInput: Measurement {
         get {
-            return Measurement(weightInLbs: weight.weightInLbs, heightInInches: totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: totalHeightCentimeters)
+            return Measurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
         }
         set {
             weight.weightInLbs = newValue.weightInLbs
-            totalHeightInInches = newValue.totalHeightInInches
+            height.totalHeightInInches = newValue.totalHeightInInches
             weight.weightInKgs = newValue.weightInKgs
-            totalHeightCentimeters = newValue.totalHeightInCm
+            height.totalHeightCentimeters = newValue.totalHeightInCm
         }
     }
     
@@ -44,30 +44,8 @@ class ViewController: UIViewController {
     
     /// Keeps track of the weight values selected by user on pickerview, and stores the value of weight from Measurement Data Model.  
     private var weight = Weight()
+    private var height = Height()
     
-    private var heightInFt: Int = 5
-    private var heightInInches: Int = 10
-    private var totalHeightInInches: Double {
-        get {
-          return Double(heightInFt * 12) + Double(heightInInches)
-        }
-        set {
-            heightInFt = Int(newValue / 12)
-            heightInInches = Int(newValue) % 12
-        }
-    }
-    
-    private var heightInMeter = 1
-    private var heightInCentimeter = 60
-    private var totalHeightCentimeters: Double {
-        get {
-            return Double(heightInMeter * 100) + Double(heightInCentimeter)
-        }
-        set {
-            heightInMeter = Int(newValue / 100)
-            heightInCentimeter = Int(newValue) % 100
-        }
-    }
 
     private struct ImperialNumberPickerViewRange {
         static let weightWholeNumberRange = Array(90...443)
@@ -113,9 +91,9 @@ class ViewController: UIViewController {
         let context = inputCoordinator.heightContext
         switch context.measurementSystem {
         case .imperial:
-            return totalHeightInInches.inchToMeter
+            return height.totalHeightInInches.inchToMeter
         case .metric:
-            return totalHeightCentimeters / 100
+            return height.totalHeightCentimeters / 100
         }
     }
     
@@ -205,13 +183,13 @@ class ViewController: UIViewController {
         
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
             if activeContext.measurementSystem == .imperial {
-                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: heightInFt)!
-                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: heightInInches)!
+                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: height.heightInFt)!
+                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: height.heightInInches)!
                 pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
             } else {
                 let heightInMeterIndex = 0
-                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: heightInCentimeter)!
+                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: height.heightInCentimeter)!
                 pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInCentimeterIndex, inComponent: 2, animated: false)
             }
@@ -256,9 +234,9 @@ class ViewController: UIViewController {
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.heightContext.measurementSystem {
         case .imperial:
-            heightButton.setTitle("\(heightInFt) ft \(heightInInches) in", for: .normal)
+            heightButton.setTitle("\(height.heightInFt) ft \(height.heightInInches) in", for: .normal)
         case .metric:
-            heightButton.setTitle("\(heightInMeter) m \(heightInCentimeter) cm", for: .normal)
+            heightButton.setTitle("\(height.heightInMeter) m \(height.heightInCentimeter) cm", for: .normal)
         }
     }
     
@@ -437,18 +415,18 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             if currentContext.measurementSystem == .imperial {
                 switch component {
                 case 0:
-                    heightInFt = ImperialNumberPickerViewRange.heightInFeetRange[row]
+                    height.heightInFt = ImperialNumberPickerViewRange.heightInFeetRange[row]
                 case 2:
-                    heightInInches = ImperialNumberPickerViewRange.heightInInchesRange[row]
+                    height.heightInInches = ImperialNumberPickerViewRange.heightInInchesRange[row]
                 default:
                     break
                 }
             } else {
                 switch component {
                 case 0:
-                    heightInMeter = MetricNumberPickerViewRange.heightInMeterRange
+                    height.heightInMeter = MetricNumberPickerViewRange.heightInMeterRange
                 case 2:
-                    heightInCentimeter = MetricNumberPickerViewRange.heightInCentimeterRange[row]
+                    height.heightInCentimeter = MetricNumberPickerViewRange.heightInCentimeterRange[row]
                 default:
                     break
                 }

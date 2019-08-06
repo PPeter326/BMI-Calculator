@@ -9,6 +9,7 @@
 import Foundation
 
 struct Weight {
+    
     var weightInLbs: Double {
         get {
             return Double(weightInLbsWholeNumber) + Double(weightInLbsDecimal) / 10
@@ -36,7 +37,6 @@ struct Weight {
             weightInKgDecimal = Int(decimalDifferenceInTenthsRounded)
         }
     }
-    
     var weightInKgWholeNumber = 50
     var weightInKgDecimal = 9
     
