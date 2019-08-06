@@ -10,35 +10,30 @@ import Foundation
 
 struct BMICalculator {
     
-    /// Calculates BMI based on weight in kg and height in meters.
+    /// Calculates BMI based on weight in kg and height in meters.  The formula is BMI = kg / m^2
     /// Precondition: the values are within height and weight range established in NIH BMI table
     ///
     /// - Parameters:
     ///   - weight: in kilograms
     ///   - height: in meters
     /// - Returns: BMI (Double) if weight and height data are valid.  Returns nil otherwise
-    func calculateBMI(weight: Double, height: Double ) -> Double? {
+    func calculateBMI(weight: Measurement<UnitMass>, height: Measurement<UnitLength> ) -> Double? {
         
-        guard let weight = validatedWeight(weight: weight) else { return nil }
-        guard let heightInMeter = validatedHeight(height: height) else { return nil }
-        let BMI = weight / (heightInMeter * heightInMeter)
+        guard let weight = validatedWeight(weight: weight)?.converted(to: UnitMass.kilograms) else { return nil }
+        guard let heightInMeter = validatedHeight(height: height)?.converted(to: UnitLength.meters) else { return nil }
+        let BMI = weight.value / (heightInMeter.value * heightInMeter.value)
         return BMI
     }
         
-    private func validatedWeight(weight: Double) -> Double? {
-        return validWeightRangeInKgs.contains(weight) ? weight : nil
+    private func validatedWeight(weight: Measurement<UnitMass>) -> Measurement<UnitMass>? {
+        return validWeightRangeInLbs.contains(weight.converted(to: UnitMass.pounds).value) ? weight : nil
     }
     
-    private func validatedHeight(height: Double) -> Double? {
-        return validHeightRangeInMeters.contains(height) ? height : nil
+    private func validatedHeight(height: Measurement<UnitLength>) -> Measurement<UnitLength>? {
+        return validHeightRangeInInches.contains(height.converted(to: UnitLength.inches).value) ? height : nil
     }
     
     // Valid weight and height ranges in lbs and inches
     private let validHeightRangeInInches = 58.0...76.0
     private let validWeightRangeInLbs = 91.0...443.0
-    
-    // Valid weight and height ranges in meters and kgs
-    private let validHeightRangeInMeters = 1.47...1.91
-    private let validWeightRangeInKgs = 41.0...201.0
-    
 }

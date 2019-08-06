@@ -70,30 +70,9 @@ class ViewController: UIViewController {
     // MARK: - BMI
     private var calculator = BMICalculator()
     private var BMI: Double? {
-      return calculator.calculateBMI(weight: getWeightValue(), height: getHeightValue())
-    }
-    
-    private func getWeightValue() -> Double {
-        // if imperial -> return converted weight
-        // if metric -> return self
-        
-        let context = inputCoordinator.weightContext
-        switch context.measurementSystem {
-        case .imperial:
-            return weight.weightInLbs.converted(to: UnitMass.kilograms).value
-        case .metric:
-            return weight.weightInKgs.value
-        }
-    }
-    
-    private func getHeightValue() -> Double {
-        let context = inputCoordinator.heightContext
-        switch context.measurementSystem {
-        case .imperial:
-            return height.totalHeightInInches.converted(to: UnitLength.meters).value
-        case .metric:
-            return height.totalHeightCentimeters.converted(to: UnitLength.meters).value
-        }
+        let weightMeasurement = inputCoordinator.weightContext.measurementSystem == .imperial ? weight.weightInLbs : weight.weightInKgs
+        let heightMeasurement = inputCoordinator.heightContext.measurementSystem == .imperial ? height.totalHeightInInches : height.totalHeightCentimeters
+      return calculator.calculateBMI(weight: weightMeasurement, height: heightMeasurement)
     }
     
     private var BMIDescription: String? {
