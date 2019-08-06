@@ -100,7 +100,6 @@ class ViewController: UIViewController {
         updateAllUI()
     }
     
-    
     @IBAction func WeightButtonTouched(_ sender: UIButton? = nil) {
         // The weight input is only "turned off" when weight input was previously active - much like the light bulb is only turned off if it was previoulsy on
         // otherwise, "turn on" weight input.  This is like having multiple light bulbs, and only one could be on at a time.  If the "height light bulb" was previously on, then touching
@@ -126,7 +125,6 @@ class ViewController: UIViewController {
             pickerViewSelectsHeight()
         }
     }
-    
     
     @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
         inputCoordinator.updateInputMeasurement(forIndex: sender.selectedSegmentIndex)
