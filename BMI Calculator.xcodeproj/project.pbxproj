@@ -12,7 +12,7 @@
 		F905973722F72A6D00329E71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
 		F905973922F7375B00329E71 /* BMICalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F905973822F7375B00329E71 /* BMICalculator.swift */; };
 		F91F2A5222F8FF5100EB499B /* Weight.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5122F8FF5100EB499B /* Weight.swift */; };
-		F91F2A5422F9072100EB499B /* Height.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5322F9072100EB499B /* Height.swift */; };
+		F91F2A5422F9072100EB499B /* HeightPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5322F9072100EB499B /* HeightPickerData.swift */; };
 		F91F2A5622F90B6500EB499B /* BMI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5522F90B6500EB499B /* BMI.swift */; };
 		F9505B1421574D87003E7E62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1321574D87003E7E62 /* AppDelegate.swift */; };
 		F9505B1621574D87003E7E62 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
@@ -39,7 +39,7 @@
 		F905972822F4BACB00329E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F905973822F7375B00329E71 /* BMICalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMICalculator.swift; sourceTree = "<group>"; };
 		F91F2A5122F8FF5100EB499B /* Weight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weight.swift; sourceTree = "<group>"; };
-		F91F2A5322F9072100EB499B /* Height.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Height.swift; sourceTree = "<group>"; };
+		F91F2A5322F9072100EB499B /* HeightPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightPickerData.swift; sourceTree = "<group>"; };
 		F91F2A5522F90B6500EB499B /* BMI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMI.swift; sourceTree = "<group>"; };
 		F9505B1021574D87003E7E62 /* BMI Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BMI Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9505B1321574D87003E7E62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F91F2A5122F8FF5100EB499B /* Weight.swift */,
-				F91F2A5322F9072100EB499B /* Height.swift */,
+				F91F2A5322F9072100EB499B /* HeightPickerData.swift */,
 				F9855F53219E39B200B81605 /* Utility.swift */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
 				F9505B1521574D87003E7E62 /* ViewController.swift */,
@@ -230,7 +230,7 @@
 			files = (
 				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
 				F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */,
-				F91F2A5422F9072100EB499B /* Height.swift in Sources */,
+				F91F2A5422F9072100EB499B /* HeightPickerData.swift in Sources */,
 				F905973922F7375B00329E71 /* BMICalculator.swift in Sources */,
 				F91F2A5622F90B6500EB499B /* BMI.swift in Sources */,
 				F9505B1621574D87003E7E62 /* ViewController.swift in Sources */,
