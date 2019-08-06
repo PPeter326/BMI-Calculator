@@ -10,11 +10,12 @@ import Foundation
 
 struct BMICalculator {
     
-    // MARK: - Calculations
-    
     /// Calculates BMI based on weight in kg and height in meters.
     /// Precondition: the values are within height and weight range established in NIH BMI table
     ///
+    /// - Parameters:
+    ///   - weight: in kilograms
+    ///   - height: in meters
     /// - Returns: BMI (Double) if weight and height data are valid.  Returns nil otherwise
     func calculateBMI(weight: Double, height: Double ) -> Double? {
         
