@@ -22,8 +22,8 @@ struct HeightPickerData {
         }
     }
     
-    var meterComponent = 1
-    var centimeterComponent = 60
+    var meterComponent:Int = 1
+    var centimeterComponent: Int = 60
     var totalHeightCentimeters: Measurement<UnitLength> {
         get {
             return Measurement(value: Double(meterComponent * 100) + Double(centimeterComponent), unit: UnitLength.centimeters)
