@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    private var pickerViewController = PickerViewController()
     
     // MARK: - Model
     
@@ -42,7 +41,7 @@ class ViewController: UIViewController {
     
     // MARK: - Weight/Height Input
     
-    /// Keeps track of the weight values selected by user on pickerview, and stores the value of weight from Measurement Data Model.  
+    /// Keeps track of the height/weight values selected by user on pickerview, and stores the value of height/weight from Measurement Data Model.
     private var weight = Weight()
     private var height = Height()
     
@@ -98,7 +97,7 @@ class ViewController: UIViewController {
     }
     
     private var BMIDescription: String? {
-        return BMI != nil ? category(of: BMI!).describe() : nil
+        return BMI != nil ? BMICategory.category(of: BMI!).describe() : nil
     }
     
     override func viewDidLoad() {
@@ -285,41 +284,10 @@ class ViewController: UIViewController {
     
     
     
-    private func category(of BMI: Double) -> BMICategory {
-        switch BMI {
-        case 0..<18.5:
-            return .underweight
-        case 18.5..<25:
-            return .normalWeight
-        case 25..<30:
-            return .overweight
-        case 30...:
-            return .obesity
-        default:
-            return .undetermined
-        }
-    }
     
     
-    private enum BMICategory {
-        
-        case underweight, normalWeight, overweight, obesity, undetermined
-        
-        func describe() -> String {
-            switch self {
-            case .underweight:
-                return "Underweight BMI"
-            case .normalWeight:
-                return "Normal Weight BMI"
-            case .overweight:
-                return "Overweight BMI"
-            case .obesity:
-                return "Obesity BMI"
-            case .undetermined:
-                return "Sorry, we're unable to determine your BMI"
-            }
-        }
-    }
+    
+    
 
 }
 
@@ -440,7 +408,12 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     // MARK: PickerView Datasource Methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if let currentContext = inputCoordinator.currentInputContext() {
-            return pickerViewController.numberOfColumns(ofContext: currentContext)
+            switch currentContext.bodyMeasurement {
+            case .height:
+                return 4
+            case .weight:
+                return 3
+            }
         } else {
             return 0
         }
@@ -497,22 +470,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 default:
                     return 1
                 }
-            }
-        }
-    }
-}
-
-
-extension ViewController {
-    // The PickerViewController keeps track of the data and layout for pickerview given the inputContext
-    //
-    private struct PickerViewController {
-        func numberOfColumns(ofContext context: MeasurementContext) -> Int {
-            switch context.bodyMeasurement {
-            case .height:
-                return 4
-            case .weight:
-                return 3
             }
         }
     }
