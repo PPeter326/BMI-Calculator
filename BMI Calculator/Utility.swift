@@ -8,20 +8,6 @@
 
 import Foundation
 
-extension Double {
-    
-    /// calculates kilogram equivalent of pound
-    var lbToKg: Double {
-        return self * 0.453592
-    }
-    
-    /// Calculates meters equivalent of inches
-    var inchToMeter: Double {
-        return self * 0.0254
-    }
-    
-}
-
 // Keeps track of input mode and input context
 class InputCoordinator {
     

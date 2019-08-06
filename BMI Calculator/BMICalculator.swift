@@ -33,7 +33,10 @@ struct BMICalculator {
         return validHeightRangeInInches.contains(height.converted(to: UnitLength.inches).value) ? height : nil
     }
     
-    // Valid weight and height ranges in lbs and inches
+    /// Valid height ranges in inches
+    /// based on *Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults: The Evidence Report.*
     private let validHeightRangeInInches = 58.0...76.0
+    /// Valid weight height ranges in lbs
+    /// based on *Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults: The Evidence Report.*
     private let validWeightRangeInLbs = 91.0...443.0
 }
