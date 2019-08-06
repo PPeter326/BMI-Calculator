@@ -17,15 +17,15 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
     }
     
     var weightInLbs: Measurement<UnitMass>
-    var totalHeightInInches: Double
+    var totalHeightInInches: Measurement<UnitLength>
     var weightInKgs: Measurement<UnitMass>
-    var totalHeightInCm: Double
+    var totalHeightInCm: Measurement<UnitLength>
     
     init(weightInLbs: Double, heightInInches: Double, weightInKgs: Double, totalHeightInCm: Double) {
         self.weightInLbs = Measurement(value: weightInLbs, unit: UnitMass.pounds)
-        self.totalHeightInInches = heightInInches
+        self.totalHeightInInches = Measurement(value: heightInInches, unit: UnitLength.inches)
         self.weightInKgs = Measurement(value: weightInKgs, unit: UnitMass.kilograms)
-        self.totalHeightInCm = totalHeightInCm
+        self.totalHeightInCm = Measurement(value: totalHeightInCm, unit: UnitLength.centimeters)
     }
     
     

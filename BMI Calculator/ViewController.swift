@@ -33,9 +33,9 @@ class ViewController: UIViewController {
         }
         set {
             weight.weightInLbs = newValue.weightInLbs.value
-            height.totalHeightInInches = newValue.totalHeightInInches
+            height.totalHeightInInches = newValue.totalHeightInInches.value
             weight.weightInKgs = newValue.weightInKgs.value
-            height.totalHeightCentimeters = newValue.totalHeightInCm
+            height.totalHeightCentimeters = newValue.totalHeightInCm.value
         }
     }
     
