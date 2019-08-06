@@ -123,6 +123,9 @@ class ViewController: UIViewController {
     
     
     @IBAction func WeightButtonTouched(_ sender: UIButton? = nil) {
+        // The weight input is only "turned off" when weight input was previously active - much like the light bulb is only turned off if it was previoulsy on
+        // otherwise, "turn on" weight input.  This is like having multiple light bulbs, and only one could be on at a time.  If the "height light bulb" was previously on, then touching
+        // the control at "weight light bulb" will turn it on and turn off the height light bulb.
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
             inputCoordinator.deactivateInput()
             updateAllUI()
@@ -134,6 +137,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
+        // See comments at weightButtonTouched(_:) for logic explanation.
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
             inputCoordinator.deactivateInput()
             updateAllUI()
