@@ -15,8 +15,10 @@ struct HeightPickerData {
     
     /// Holds value from feet component in pickerview
     var feetComponent: Int = 5
+    
     /// Holds value from inch component in pickerview
     var inchComponent: Int = 10
+    
     /// Represent the imperial measurement value that corresponds to the pickerview components.  When this property is set, it will reset both feet and inch components.
     var totalHeightInInches: Measurement<UnitLength> {
         get {
@@ -24,14 +26,13 @@ struct HeightPickerData {
         }
         set {
             let newValue = newValue.value
-            feetComponent = Int(newValue / 12)
+            feetComponent = Int(newValue) / 12
             inchComponent = Int(newValue) % 12
         }
     }
     
     /// Holds value from meter component in pickerview
     var meterComponent:Int = 1
-    
     /// Holds value from centimeter component in pickerview
     var centimeterComponent: Int = 60
     
@@ -42,7 +43,7 @@ struct HeightPickerData {
         }
         set {
             let newValue = newValue.value
-            meterComponent = Int(newValue / 100)
+            meterComponent = Int(newValue) / 100
             centimeterComponent = Int(newValue) % 100
         }
     }
