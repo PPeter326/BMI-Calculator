@@ -13,7 +13,7 @@ import Foundation
 struct BodyMeasurement: Codable, CustomStringConvertible {
     
     var description: String {
-        return "Imperial: \(weightInLbs) lbs \(totalHeightInInches) inches, Metric: \(weightInKgs) kgs, \(totalHeightInCm) cm"
+        return "Imperial: \(weightInLbs.value) lbs \(totalHeightInInches.value) inches, Metric: \(weightInKgs.value) kgs, \(totalHeightInCm.value) cm"
     }
     
     var weightInLbs: Measurement<UnitMass>
@@ -21,11 +21,11 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
     var weightInKgs: Measurement<UnitMass>
     var totalHeightInCm: Measurement<UnitLength>
     
-    init(weightInLbs: Double, heightInInches: Double, weightInKgs: Double, totalHeightInCm: Double) {
-        self.weightInLbs = Measurement(value: weightInLbs, unit: UnitMass.pounds)
-        self.totalHeightInInches = Measurement(value: heightInInches, unit: UnitLength.inches)
-        self.weightInKgs = Measurement(value: weightInKgs, unit: UnitMass.kilograms)
-        self.totalHeightInCm = Measurement(value: totalHeightInCm, unit: UnitLength.centimeters)
+    init(weightInLbs: Measurement<UnitMass>, heightInInches: Measurement<UnitLength>, weightInKgs: Measurement<UnitMass>, totalHeightInCm: Measurement<UnitLength>) {
+        self.weightInLbs = weightInLbs
+        self.totalHeightInInches = heightInInches
+        self.weightInKgs = weightInKgs
+        self.totalHeightInCm = totalHeightInCm
     }
     
     
@@ -67,7 +67,7 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
     ///
     /// - Returns: Measurement struct with predefined sample weight and height data
     static func loadSampleMeasurement() -> BodyMeasurement {
-        let sampleMeasurement = BodyMeasurement(weightInLbs: 170, heightInInches: 72, weightInKgs: 83, totalHeightInCm: 170)
+        let sampleMeasurement = BodyMeasurement(weightInLbs: Measurement(value: 170, unit: UnitMass.pounds), heightInInches: Measurement(value: 72, unit: UnitLength.inches), weightInKgs: Measurement(value: 83, unit: UnitMass.kilograms), totalHeightInCm: Measurement(value: 170, unit: UnitLength.centimeters))
         return sampleMeasurement
     }
     

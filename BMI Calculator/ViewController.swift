@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     */
     private var userInput: BodyMeasurement {
         get {
-            return BodyMeasurement(weightInLbs: weight.weightInLbs.value, heightInInches: height.totalHeightInInches.value, weightInKgs: weight.weightInKgs.value, totalHeightInCm: height.totalHeightCentimeters.value)
+            return BodyMeasurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
         }
         set {
             weight.weightInLbs = newValue.weightInLbs
