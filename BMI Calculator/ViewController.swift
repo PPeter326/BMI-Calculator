@@ -89,6 +89,7 @@ class ViewController: UIViewController {
             userInput = BodyMeasurement.loadSampleMeasurement()
         }
         updateAllUI()
+        
     }
 
     // MARK: - User Interaction
@@ -132,9 +133,10 @@ class ViewController: UIViewController {
         pickerView.reloadAllComponents()
         // pickerview select proper values based on body measurement of current input context
         inputCoordinator.currentInputContext()!.bodyMeasurement == .weight ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
-        // update weight/height button
+        // update weight/height button and BMI calculation
         updateWeightButton()
         updateHeightButton()
+        updateBMILabels()
     }
     
     // MARK: - Input
@@ -375,6 +377,8 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             }
             updateHeightButton()
         }
+        // Dynamic calculation
+        updateBMILabels()
         // save user input
         BodyMeasurement.saveToFile(measurement: userInput)
     }

@@ -19,24 +19,6 @@ class DoubleExtensionTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testPoundToKg() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let weightInLb: Double = 100.00
-        let weightInKg = weightInLb.lbToKg
-        let poundToKgConstant = 0.453592
-        
-        XCTAssertEqual(weightInKg, weightInLb * poundToKgConstant, "KG weight not converted correctly")
-        
-    }
-    
-    func testInchToMeter() {
-        let heightInInches: Double = 72
-        let heightInMeter = heightInInches.inchToMeter
-        let inchToMeterConstant = 0.0254
-        
-        XCTAssertEqual(heightInMeter, heightInInches * inchToMeterConstant, "Height meter not converted correctly")
-    }
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
