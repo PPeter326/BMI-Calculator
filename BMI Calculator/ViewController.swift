@@ -27,7 +27,7 @@ class ViewController: UIViewController {
      
     When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
     */
-    private var userInput: BodyMeasurement {
+    private var bodyMeasurement: BodyMeasurement {
         get {
             return BodyMeasurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
         }
@@ -70,8 +70,8 @@ class ViewController: UIViewController {
     // MARK: - BMI
     private var calculator = BMICalculator()
     private var BMI: Double? {
-        let weightMeasurement = inputCoordinator.weightContext.measurementSystem == .imperial ? weight.weightInLbs : weight.weightInKgs
-        let heightMeasurement = inputCoordinator.heightContext.measurementSystem == .imperial ? height.totalHeightInInches : height.totalHeightCentimeters
+        let weightMeasurement = inputCoordinator.weightContext.system == .imperial ? weight.weightInLbs : weight.weightInKgs
+        let heightMeasurement = inputCoordinator.heightContext.system == .imperial ? height.totalHeightInInches : height.totalHeightCentimeters
       return calculator.calculateBMI(weight: weightMeasurement, height: heightMeasurement)
     }
     
@@ -79,14 +79,15 @@ class ViewController: UIViewController {
         return BMI != nil ? BMICategory.category(of: BMI!).describe() : nil
     }
     
+    // MARK: - Initial Set-Up
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Initial set up
         if let measurement = BodyMeasurement.loadFromFile() {
-            userInput = measurement
+            bodyMeasurement = measurement
         } else {
-            userInput = BodyMeasurement.loadSampleMeasurement()
+            bodyMeasurement = BodyMeasurement.loadSampleMeasurement()
         }
         updateAllUI()
         
@@ -105,7 +106,7 @@ class ViewController: UIViewController {
         // The weight input is only "turned off" when weight input was previously active - much like the light bulb is only turned off if it was previoulsy on
         // otherwise, "turn on" weight input.  This is like having multiple light bulbs, and only one could be on at a time.  If the "height light bulb" was previously on, then touching
         // the control at "weight light bulb" will turn it on and turn off the height light bulb.
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
             inputCoordinator.deactivateInput()
             updateAllUI()
         } else {
@@ -117,7 +118,7 @@ class ViewController: UIViewController {
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
         // See comments at weightButtonTouched(_:) for logic explanation.
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
             inputCoordinator.deactivateInput()
             updateAllUI()
         } else {
@@ -132,20 +133,84 @@ class ViewController: UIViewController {
         // reload pickerView to reflect input measurement
         pickerView.reloadAllComponents()
         // pickerview select proper values based on body measurement of current input context
-        inputCoordinator.currentInputContext()!.bodyMeasurement == .weight ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
+        inputCoordinator.currentInputContext()!.type == .weight ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
+        // save user preference on measurement system
+        UserDefaults.standard.set(inputCoordinator.weightContext.system.rawValue, forKey: "weightContext")
+        UserDefaults.standard.set(inputCoordinator.heightContext.system.rawValue, forKey: "heightContext")
         // update weight/height button and BMI calculation
         updateWeightButton()
         updateHeightButton()
         updateBMILabels()
     }
     
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let currentContext = inputCoordinator.currentInputContext()!
+        switch currentContext.type {
+        case .weight:
+            if currentContext.system == .imperial {
+                switch component {
+                case 0:
+                    weight.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
+                case 1:
+                    weight.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
+                default:
+                    break
+                }
+            } else {
+                switch component {
+                case 0:
+                    weight.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
+                case 1:
+                    weight.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
+                default:
+                    break
+                }
+            }
+            updateWeightButton()
+        case .height:
+            if currentContext.system == .imperial {
+                switch component {
+                case 0:
+                    height.feetComponent = ImperialNumberPickerViewRange.heightInFeetRange[row]
+                case 2:
+                    height.inchComponent = ImperialNumberPickerViewRange.heightInInchesRange[row]
+                default:
+                    break
+                }
+            } else {
+                switch component {
+                case 0:
+                    height.meterComponent = MetricNumberPickerViewRange.heightInMeterRange
+                case 2:
+                    height.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
+                default:
+                    break
+                }
+            }
+            updateHeightButton()
+        }
+        // Dynamic calculation
+        updateBMILabels()
+        // save user input
+        BodyMeasurement.saveToFile(measurement: bodyMeasurement)
+        // save user preference on measurement system
+        UserDefaults.standard.set(inputCoordinator.weightContext.system.rawValue, forKey: "weightContext")
+        UserDefaults.standard.set(inputCoordinator.heightContext.system.rawValue, forKey: "heightContext")
+    }
+    
     // MARK: - Input
     
-    fileprivate var inputCoordinator = InputCoordinator()
+    /// Will attempt to load height and weight context (imperial vs metric) of the buttons from UserDefault if they were properly saved, otherwise load imperial system by default
+    fileprivate var inputCoordinator:InputCoordinator = {
+        let inputCoordinator = InputCoordinator()
+        inputCoordinator.heightContext.system = MeasurementContext.MeasurementSystem(rawValue: UserDefaults.standard.integer(forKey: "heightContext")) ?? .imperial
+        inputCoordinator.weightContext.system = MeasurementContext.MeasurementSystem(rawValue: UserDefaults.standard.integer(forKey: "weightContext")) ?? .imperial
+        return inputCoordinator
+    }()
     
     private func pickerViewSelectsWeight() {
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
-            if activeContext.measurementSystem == .imperial {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
+            if activeContext.system == .imperial {
                 let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.poundsComponent)!
                 let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.poundsDecimalComponent)!
                 pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
@@ -163,8 +228,8 @@ class ViewController: UIViewController {
     
     private func pickerViewSelectsHeight() {
         
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
-            if activeContext.measurementSystem == .imperial {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
+            if activeContext.system == .imperial {
                 let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: height.feetComponent)!
                 let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: height.inchComponent)!
                 pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
@@ -192,13 +257,13 @@ class ViewController: UIViewController {
     
     private func updateWeightButton() {
         // update button title color depending on input state
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .weight {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
             weightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
             weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
-        switch inputCoordinator.weightContext.measurementSystem {
+        switch inputCoordinator.weightContext.system {
         case .imperial:
             weightButton.setTitle("\(weight.poundsComponent).\(weight.poundsDecimalComponent) lbs", for: .normal)
         case .metric:
@@ -208,13 +273,13 @@ class ViewController: UIViewController {
     
     private func updateHeightButton() {
         // update button title color depending on input state
-        if let activeContext = inputCoordinator.currentInputContext(), activeContext.bodyMeasurement == .height {
+        if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
             heightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
             heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
-        switch inputCoordinator.heightContext.measurementSystem {
+        switch inputCoordinator.heightContext.system {
         case .imperial:
             heightButton.setTitle("\(height.feetComponent) ft \(height.inchComponent) in", for: .normal)
         case .metric:
@@ -226,12 +291,12 @@ class ViewController: UIViewController {
         segmentedControl.isHidden = (inputCoordinator.mode == .Viewing)
         
         if let currentContext = inputCoordinator.currentInputContext() {
-        let currentBodyMeasurement = currentContext.bodyMeasurement
+        let currentBodyMeasurement = currentContext.type
             switch currentBodyMeasurement  {
             case .weight:
                 segmentedControl.setTitle("Lbs", forSegmentAt: 0)
                 segmentedControl.setTitle("Kg", forSegmentAt: 1)
-                if currentContext.measurementSystem == .imperial {
+                if currentContext.system == .imperial {
                     segmentedControl.selectedSegmentIndex = 0
                 } else {
                     segmentedControl.selectedSegmentIndex = 1
@@ -239,7 +304,7 @@ class ViewController: UIViewController {
             case .height:
                 segmentedControl.setTitle("Ft/In", forSegmentAt: 0)
                 segmentedControl.setTitle("M/Cm", forSegmentAt: 1)
-                if currentContext.measurementSystem == .imperial {
+                if currentContext.system == .imperial {
                     segmentedControl.selectedSegmentIndex = 0
                 } else {
                     segmentedControl.selectedSegmentIndex = 1
@@ -270,12 +335,12 @@ class ViewController: UIViewController {
 // MARK: -
 extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
-    // MARK: PickerView Delegate Methods
+    // MARK: PickerView setup/datasource
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let currentContext = inputCoordinator.currentInputContext()!
-        switch currentContext.bodyMeasurement {
+        switch currentContext.type {
         case .weight:
-            if currentContext.measurementSystem == .imperial {
+            if currentContext.system == .imperial {
                 switch component {
                 case 0:
                     return String(ImperialNumberPickerViewRange.weightWholeNumberRange[row])
@@ -299,7 +364,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 }
             }
         case .height:
-            if currentContext.measurementSystem == .imperial {
+            if currentContext.system == .imperial {
                 switch component {
                 case 0:
                     return String(ImperialNumberPickerViewRange.heightInFeetRange[row])
@@ -329,64 +394,9 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
     }
     
-    
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let currentContext = inputCoordinator.currentInputContext()!
-        switch currentContext.bodyMeasurement {
-        case .weight:
-            if currentContext.measurementSystem == .imperial {
-                switch component {
-                case 0:
-                    weight.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
-                case 1:
-                    weight.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
-                default:
-                    break
-                }
-            } else {
-                switch component {
-                case 0:
-                    weight.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
-                case 1:
-                    weight.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
-                default:
-                    break
-                }
-            }
-            updateWeightButton()
-        case .height:
-            if currentContext.measurementSystem == .imperial {
-                switch component {
-                case 0:
-                    height.feetComponent = ImperialNumberPickerViewRange.heightInFeetRange[row]
-                case 2:
-                    height.inchComponent = ImperialNumberPickerViewRange.heightInInchesRange[row]
-                default:
-                    break
-                }
-            } else {
-                switch component {
-                case 0:
-                    height.meterComponent = MetricNumberPickerViewRange.heightInMeterRange
-                case 2:
-                    height.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
-                default:
-                    break
-                }
-            }
-            updateHeightButton()
-        }
-        // Dynamic calculation
-        updateBMILabels()
-        // save user input
-        BodyMeasurement.saveToFile(measurement: userInput)
-    }
-    
-    // MARK: PickerView Datasource Methods
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         if let currentContext = inputCoordinator.currentInputContext() {
-            switch currentContext.bodyMeasurement {
+            switch currentContext.type {
             case .height:
                 return 4
             case .weight:
@@ -400,9 +410,9 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
         let currentContext = inputCoordinator.currentInputContext()!
-        switch currentContext.bodyMeasurement {
+        switch currentContext.type {
         case .weight:
-            if currentContext.measurementSystem == .imperial {
+            if currentContext.system == .imperial {
                 switch component {
                 case 0:
                     return ImperialNumberPickerViewRange.weightWholeNumberRange.count
@@ -426,7 +436,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 }
             }
         case .height:
-            if currentContext.measurementSystem == .imperial {
+            if currentContext.system == .imperial {
                 switch component {
                 case 0:
                     return ImperialNumberPickerViewRange.heightInFeetRange.count

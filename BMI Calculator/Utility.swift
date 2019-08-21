@@ -18,8 +18,8 @@ class InputCoordinator {
     
     init() {
         mode = Mode.Viewing
-        weightContext = MeasurementContext(measurement: .weight, system: .imperial)
-        heightContext = MeasurementContext(measurement: .height, system: .imperial)
+        weightContext = MeasurementContext(type: .weight, system: .imperial)
+        heightContext = MeasurementContext(type: .height, system: .imperial)
     }
     
     func currentInputContext() -> MeasurementContext? {
@@ -46,9 +46,9 @@ class InputCoordinator {
         // update input measurement
         switch index {
         case 0:
-            activeInputContext!.measurementSystem = .imperial
+            activeInputContext!.system = .imperial
         case 1:
-            activeInputContext!.measurementSystem = .metric
+            activeInputContext!.system = .metric
         default:
             break
         }
@@ -63,19 +63,19 @@ class InputCoordinator {
 
 /// Context keeps track of the context of the measurement.  For example, a measurement of height in imperial system, or measurement of weight in metric system
 class MeasurementContext {
-    var bodyMeasurement: BodyMeasurement
-    var measurementSystem: MeasurementSystem
+    var type: MeasurementType
+    var system: MeasurementSystem
     
-    init(measurement: BodyMeasurement, system: MeasurementSystem) {
-        bodyMeasurement = measurement
-        measurementSystem = system
+    init(type: MeasurementType, system: MeasurementSystem) {
+        self.type = type
+        self.system = system
     }
     
     // MARK: Input State Management
     /// There are three mutually exclusive state.  Either the user is inputting weight, or inputting height, or simply viewing (none).  InputState enum
     /// encapsulates these mutually exclusive state.
     ///
-    enum BodyMeasurement {
+    enum MeasurementType {
         case weight
         case height
     }
@@ -85,8 +85,8 @@ class MeasurementContext {
     /// - metric: represents metric system input
     /// - imperial: represents imperial system input
     enum MeasurementSystem: Int, Codable {
-        case metric
-        case imperial
+        case metric = 1
+        case imperial = 2
     }
 }
 
