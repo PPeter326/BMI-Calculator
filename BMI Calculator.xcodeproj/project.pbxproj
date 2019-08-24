@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		F905972722F4BACB00329E71 /* DoubleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F905972622F4BACB00329E71 /* DoubleExtensionTests.swift */; };
 		F905972F22F4C00800329E71 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F53219E39B200B81605 /* Utility.swift */; };
-		F905973722F72A6D00329E71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
+		F905973722F72A6D00329E71 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* CalculatorViewController.swift */; };
 		F905973922F7375B00329E71 /* BMICalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F905973822F7375B00329E71 /* BMICalculator.swift */; };
+		F916205A2311B2940006392A /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91620592311B2940006392A /* DisclaimerViewController.swift */; };
 		F91F2A5222F8FF5100EB499B /* WeightPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */; };
 		F91F2A5422F9072100EB499B /* HeightPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5322F9072100EB499B /* HeightPickerData.swift */; };
 		F91F2A5622F90B6500EB499B /* BMI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5522F90B6500EB499B /* BMI.swift */; };
 		F9505B1421574D87003E7E62 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1321574D87003E7E62 /* AppDelegate.swift */; };
-		F9505B1621574D87003E7E62 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* ViewController.swift */; };
+		F9505B1621574D87003E7E62 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* CalculatorViewController.swift */; };
 		F9505B1921574D87003E7E62 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1721574D87003E7E62 /* Main.storyboard */; };
 		F9505B1B21574D89003E7E62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1A21574D89003E7E62 /* Assets.xcassets */; };
 		F9505B1E21574D89003E7E62 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9505B1C21574D89003E7E62 /* LaunchScreen.storyboard */; };
@@ -38,12 +39,13 @@
 		F905972622F4BACB00329E71 /* DoubleExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensionTests.swift; sourceTree = "<group>"; };
 		F905972822F4BACB00329E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F905973822F7375B00329E71 /* BMICalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMICalculator.swift; sourceTree = "<group>"; };
+		F91620592311B2940006392A /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
 		F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPickerData.swift; sourceTree = "<group>"; };
 		F91F2A5322F9072100EB499B /* HeightPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightPickerData.swift; sourceTree = "<group>"; };
 		F91F2A5522F90B6500EB499B /* BMI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMI.swift; sourceTree = "<group>"; };
 		F9505B1021574D87003E7E62 /* BMI Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BMI Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9505B1321574D87003E7E62 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F9505B1521574D87003E7E62 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F9505B1521574D87003E7E62 /* CalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewController.swift; sourceTree = "<group>"; };
 		F9505B1821574D87003E7E62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F9505B1A21574D89003E7E62 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9505B1D21574D89003E7E62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -105,7 +107,8 @@
 				F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */,
 				F91F2A5322F9072100EB499B /* HeightPickerData.swift */,
 				F9855F53219E39B200B81605 /* Utility.swift */,
-				F9505B1521574D87003E7E62 /* ViewController.swift */,
+				F9505B1521574D87003E7E62 /* CalculatorViewController.swift */,
+				F91620592311B2940006392A /* DisclaimerViewController.swift */,
 				F91F2A5522F90B6500EB499B /* BMI.swift */,
 				F9505B1721574D87003E7E62 /* Main.storyboard */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
@@ -220,7 +223,7 @@
 			files = (
 				F905972F22F4C00800329E71 /* Utility.swift in Sources */,
 				F905972722F4BACB00329E71 /* DoubleExtensionTests.swift in Sources */,
-				F905973722F72A6D00329E71 /* ViewController.swift in Sources */,
+				F905973722F72A6D00329E71 /* CalculatorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,10 +233,11 @@
 			files = (
 				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
 				F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */,
+				F916205A2311B2940006392A /* DisclaimerViewController.swift in Sources */,
 				F91F2A5422F9072100EB499B /* HeightPickerData.swift in Sources */,
 				F905973922F7375B00329E71 /* BMICalculator.swift in Sources */,
 				F91F2A5622F90B6500EB499B /* BMI.swift in Sources */,
-				F9505B1621574D87003E7E62 /* ViewController.swift in Sources */,
+				F9505B1621574D87003E7E62 /* CalculatorViewController.swift in Sources */,
 				F9505B1421574D87003E7E62 /* AppDelegate.swift in Sources */,
 				F91F2A5222F8FF5100EB499B /* WeightPickerData.swift in Sources */,
 			);

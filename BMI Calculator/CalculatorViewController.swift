@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
     
     // MARK: - Views
     @IBOutlet weak var weightButton: UIButton!
@@ -344,7 +344,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: -
-extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: PickerView setup/datasource
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
