@@ -19,17 +19,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5sH-A8-T1a" userLabel="BMI Background">
-                                <rect key="frame" x="67.5" y="269" width="279.5" height="198"/>
+                                <rect key="frame" x="62.5" y="269" width="289.5" height="198"/>
                                 <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="52" translatesAutoresizingMaskIntoConstraints="NO" id="wtm-B0-8Uy" userLabel="Calculator Stack View">
                                 <rect key="frame" x="10" y="94" width="394" height="348"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="FsJ-lo-AgG" userLabel="Height Weight Stack View">
-                                        <rect key="frame" x="57.5" y="0.0" width="279.5" height="148"/>
+                                        <rect key="frame" x="52.5" y="0.0" width="289.5" height="148"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="T75-ZZ-dqS" userLabel="Weight Stack View">
-                                                <rect key="frame" x="0.0" y="0.0" width="279.5" height="59"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="289.5" height="59"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="WeightLabel" text="Weight" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="hLe-jl-aAJ">
                                                         <rect key="frame" x="0.0" y="0.0" width="89.5" height="59"/>
@@ -38,13 +38,13 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="weightButton" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B5p-J6-aWg">
-                                                        <rect key="frame" x="139.5" y="0.0" width="140" height="59"/>
+                                                        <rect key="frame" x="139.5" y="0.0" width="150" height="59"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="s7m-7u-VFh"/>
+                                                            <constraint firstAttribute="width" constant="150" id="s7m-7u-VFh"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
                                                         <state key="normal" title="185 lbs">
-                                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="WeightButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hDY-xi-HPG"/>
@@ -53,7 +53,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="jkg-zp-8Qh" userLabel="Height Stack View">
-                                                <rect key="frame" x="0.0" y="89" width="279.5" height="59"/>
+                                                <rect key="frame" x="0.0" y="89" width="289.5" height="59"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="HeightLabel" text="Height" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="KvO-p1-psb">
                                                         <rect key="frame" x="0.0" y="0.0" width="89.5" height="59"/>
@@ -62,10 +62,10 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="heightButton" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TJv-fM-TgX">
-                                                        <rect key="frame" x="139.5" y="0.0" width="140" height="59"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                        <rect key="frame" x="139.5" y="0.0" width="150" height="59"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
                                                         <state key="normal" title="5 ft 10 in">
-                                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="heightButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7f6-VE-rEh"/>

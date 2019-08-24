@@ -269,7 +269,7 @@ class ViewController: UIViewController {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
             weightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
-            weightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
+            weightButton.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.weightContext.system {
@@ -285,7 +285,7 @@ class ViewController: UIViewController {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
             heightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
-            heightButton.setTitleColor(#colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1), for: .normal)
+            heightButton.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.heightContext.system {
