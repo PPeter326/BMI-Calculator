@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum BMICategory {
     
@@ -39,6 +40,24 @@ enum BMICategory {
             return .obesity
         default:
             return .undetermined
+        }
+    }
+}
+
+extension BMICategory {
+    
+    func color() -> UIColor {
+        switch self {
+        case .underweight:
+            return #colorLiteral(red: 0.8439414501, green: 0.4790760279, blue: 0, alpha: 1)
+        case .normalWeight:
+            return #colorLiteral(red: 0.2174585164, green: 0.8184141517, blue: 0, alpha: 1)
+        case .overweight:
+            return #colorLiteral(red: 1, green: 0.4863265157, blue: 0, alpha: 1)
+        case .obesity:
+            return #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+        case .undetermined:
+            return #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         }
     }
 }

@@ -17,6 +17,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var BMIBackground: UIView! {
+        didSet {
+            self.BMIBackground.layer.cornerRadius = 20
+        }
+    }
     
     // MARK: - Model
     
@@ -73,6 +78,10 @@ class ViewController: UIViewController {
         let weightMeasurement = inputCoordinator.weightContext.system == .imperial ? weight.weightInLbs : weight.weightInKgs
         let heightMeasurement = inputCoordinator.heightContext.system == .imperial ? height.totalHeightInInches : height.totalHeightCentimeters
       return calculator.calculateBMI(weight: weightMeasurement, height: heightMeasurement)
+    }
+    
+    private var categoryColor: UIColor? {
+        return BMI != nil ? BMICategory.category(of: BMI!).color() : nil
     }
     
     private var BMIDescription: String? {
@@ -324,9 +333,11 @@ class ViewController: UIViewController {
         if let BMI = BMI, let BMIDescription = BMIDescription {
             BMILabel.text = numberFormatter.string(from: NSNumber(value: BMI))
             BMICategoryLabel.text = "\(BMIDescription)"
+            BMIBackground.backgroundColor = categoryColor
         } else {
             BMILabel.text = "N/A"
             BMICategoryLabel.text = "We can't calculate based on your height and weight"
+            BMIBackground.backgroundColor = UIColor.lightGray
         }
     }
     
