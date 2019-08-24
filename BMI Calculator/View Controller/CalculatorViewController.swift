@@ -69,6 +69,7 @@ class CalculatorViewController: UIViewController {
     private let numberFormatter: NumberFormatter = {
        let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 1
         return formatter
     }()
     

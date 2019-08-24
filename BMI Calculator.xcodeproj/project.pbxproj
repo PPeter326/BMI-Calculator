@@ -81,6 +81,24 @@
 			path = "BMI CalculatorTests";
 			sourceTree = "<group>";
 		};
+		F916205B2311C5CC0006392A /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F9505B1521574D87003E7E62 /* CalculatorViewController.swift */,
+				F91620592311B2940006392A /* DisclaimerViewController.swift */,
+			);
+			path = "View Controller";
+			sourceTree = "<group>";
+		};
+		F916205C2311C5DC0006392A /* Picker Data */ = {
+			isa = PBXGroup;
+			children = (
+				F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */,
+				F91F2A5322F9072100EB499B /* HeightPickerData.swift */,
+			);
+			path = "Picker Data";
+			sourceTree = "<group>";
+		};
 		F9505B0721574D87003E7E62 = {
 			isa = PBXGroup;
 			children = (
@@ -104,11 +122,9 @@
 			children = (
 				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
-				F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */,
-				F91F2A5322F9072100EB499B /* HeightPickerData.swift */,
+				F916205C2311C5DC0006392A /* Picker Data */,
 				F9855F53219E39B200B81605 /* Utility.swift */,
-				F9505B1521574D87003E7E62 /* CalculatorViewController.swift */,
-				F91620592311B2940006392A /* DisclaimerViewController.swift */,
+				F916205B2311C5CC0006392A /* View Controller */,
 				F91F2A5522F90B6500EB499B /* BMI.swift */,
 				F9505B1721574D87003E7E62 /* Main.storyboard */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
