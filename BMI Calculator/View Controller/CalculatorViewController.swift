@@ -17,11 +17,10 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var BMIBackground: UIView! {
-        didSet {
-            self.BMIBackground.layer.cornerRadius = 20
-        }
-    }
+    @IBOutlet weak var BMIBackground: BackgroundView!
+
+    
+    
     
     // MARK: - Model
     
@@ -270,7 +269,7 @@ class CalculatorViewController: UIViewController {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
             weightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
-            weightButton.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            weightButton.setTitleColor(#colorLiteral(red: 0.4756349325, green: 0.4756467342, blue: 0.4756404161, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.weightContext.system {
@@ -286,7 +285,7 @@ class CalculatorViewController: UIViewController {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
             heightButton.setTitleColor(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1), for: .normal)
         } else {
-            heightButton.setTitleColor(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), for: .normal)
+            heightButton.setTitleColor(#colorLiteral(red: 0.4756349325, green: 0.4756467342, blue: 0.4756404161, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.heightContext.system {

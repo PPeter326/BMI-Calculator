@@ -12,6 +12,7 @@
 		F905973722F72A6D00329E71 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9505B1521574D87003E7E62 /* CalculatorViewController.swift */; };
 		F905973922F7375B00329E71 /* BMICalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F905973822F7375B00329E71 /* BMICalculator.swift */; };
 		F916205A2311B2940006392A /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91620592311B2940006392A /* DisclaimerViewController.swift */; };
+		F916205E231276A90006392A /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F916205D231276A90006392A /* BackgroundView.swift */; };
 		F91F2A5222F8FF5100EB499B /* WeightPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */; };
 		F91F2A5422F9072100EB499B /* HeightPickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5322F9072100EB499B /* HeightPickerData.swift */; };
 		F91F2A5622F90B6500EB499B /* BMI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91F2A5522F90B6500EB499B /* BMI.swift */; };
@@ -40,6 +41,7 @@
 		F905972822F4BACB00329E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F905973822F7375B00329E71 /* BMICalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMICalculator.swift; sourceTree = "<group>"; };
 		F91620592311B2940006392A /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
+		F916205D231276A90006392A /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		F91F2A5122F8FF5100EB499B /* WeightPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightPickerData.swift; sourceTree = "<group>"; };
 		F91F2A5322F9072100EB499B /* HeightPickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightPickerData.swift; sourceTree = "<group>"; };
 		F91F2A5522F90B6500EB499B /* BMI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMI.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			children = (
 				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
+				F916205D231276A90006392A /* BackgroundView.swift */,
 				F916205C2311C5DC0006392A /* Picker Data */,
 				F9855F53219E39B200B81605 /* Utility.swift */,
 				F916205B2311C5CC0006392A /* View Controller */,
@@ -247,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F916205E231276A90006392A /* BackgroundView.swift in Sources */,
 				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
 				F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */,
 				F916205A2311B2940006392A /* DisclaimerViewController.swift in Sources */,
