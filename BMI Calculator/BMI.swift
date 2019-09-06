@@ -50,15 +50,15 @@ extension BMICategory {
         let alpha: CGFloat = 1.00
         switch self {
         case .underweight:
-            return #colorLiteral(red: 0.8439414501, green: 0.4790760279, blue: 0, alpha: 1).withAlphaComponent(alpha)
+            return #colorLiteral(red: 0.6679978967, green: 0.4751212597, blue: 0.2586010993, alpha: 1).withAlphaComponent(alpha)
         case .normalWeight:
-            return #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1).withAlphaComponent(alpha)
+            return #colorLiteral(red: 0.1683373186, green: 0.7086806256, blue: 0.2502075166, alpha: 1).withAlphaComponent(alpha)
         case .overweight:
-            return #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1).withAlphaComponent(alpha)
+            return #colorLiteral(red: 0.9262628425, green: 0.5530543951, blue: 0.02845006804, alpha: 1).withAlphaComponent(alpha)
         case .obesity:
-            return #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(alpha)
+            return #colorLiteral(red: 0.8397540728, green: 0.2483899519, blue: 0.209886851, alpha: 1).withAlphaComponent(alpha)
         case .undetermined:
-            return #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(alpha)
+            return #colorLiteral(red: 0.7764705882, green: 0.7764705882, blue: 0.7764705882, alpha: 1).withAlphaComponent(alpha)
         }
     }
 }
