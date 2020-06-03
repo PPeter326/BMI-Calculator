@@ -52,6 +52,7 @@
 		F9505B1A21574D89003E7E62 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9505B1D21574D89003E7E62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9505B1F21574D89003E7E62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F96C069D2488370B00CE3C35 /* CalculatorPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = CalculatorPlayground.playground; path = "../../../Library/Autosave Information/CalculatorPlayground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		F9855F51219CA33F00B81605 /* BodyMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMeasurement.swift; sourceTree = "<group>"; };
 		F9855F53219E39B200B81605 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,6 +123,7 @@
 		F9505B1221574D87003E7E62 /* BMI Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				F96C069D2488370B00CE3C35 /* CalculatorPlayground.playground */,
 				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F916205D231276A90006392A /* BackgroundView.swift */,
