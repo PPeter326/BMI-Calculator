@@ -120,7 +120,6 @@
 				F9855F53219E39B200B81605 /* Utility.swift */,
 				F916205B2311C5CC0006392A /* View Controller */,
 				F91F2A5522F90B6500EB499B /* BMICalculator+.swift */,
-				F9505B1721574D87003E7E62 /* Main.storyboard */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
 				F9505B1A21574D89003E7E62 /* Assets.xcassets */,
 				F9505B1C21574D89003E7E62 /* LaunchScreen.storyboard */,
@@ -133,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				F96C069E2488BBD700CE3C35 /* BodyMeasurementPickerView.swift */,
+				F9505B1721574D87003E7E62 /* Main.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";

@@ -16,7 +16,7 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var BMILabel: UILabel!
     @IBOutlet weak var BMICategoryLabel: UILabel!
     @IBOutlet weak var pickerView: BodyMeasurementPickerView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var BMIBackground: BackgroundView!
 
     
@@ -31,7 +31,7 @@ class CalculatorViewController: UIViewController {
      
     When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
     */
-    private var bodyMeasurement: BodyMeasurement
+    private var bodyMeasurement: BodyMeasurement!
     
     // MARK: - Weight/Height Input
     
