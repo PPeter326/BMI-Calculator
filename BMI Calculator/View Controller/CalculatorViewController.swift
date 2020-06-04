@@ -51,10 +51,17 @@ class CalculatorViewController: UIViewController {
     }
     
     // MARK: - Formatter
-    private let numberFormatter: NumberFormatter = {
+    private let weightNumberFormatter: NumberFormatter = {
        let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 1
         formatter.minimumFractionDigits = 1
+        return formatter
+    }()
+    
+    private let heightNumberFormatter: NumberFormatter = {
+       let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
         return formatter
     }()
     
@@ -294,11 +301,11 @@ class CalculatorViewController: UIViewController {
         switch inputCoordinator.weightContext.system {
         case .imperial:
             let weight = bodyMeasurement.weight.converted(to: UnitMass.pounds).value
-            let weightString = numberFormatter.string(from: NSNumber(value: weight))
+            let weightString = weightNumberFormatter.string(from: NSNumber(value: weight))
             weightButton.setTitle("\(weightString!) lbs", for: .normal)
         case .metric:
             let weight = bodyMeasurement.weight.converted(to: UnitMass.kilograms).value
-            let weightString = numberFormatter.string(from: NSNumber(value: weight))
+            let weightString = weightNumberFormatter.string(from: NSNumber(value: weight))
             weightButton.setTitle("\(weightString!) kg", for: .normal)
         }
     }
@@ -316,12 +323,14 @@ class CalculatorViewController: UIViewController {
             let heightInInches = bodyMeasurement.height.converted(to: UnitLength.inches).value
             let feet =  bodyMeasurement.height.converted(to: UnitLength.feet).value.rounded(.towardZero)
             let inches = heightInInches - feet * 12
-            heightButton.setTitle("\(feet) ft \(inches) in", for: .normal)
+            let heightString = heightNumberFormatter.string(from: NSNumber(value: feet))! + " ft " + heightNumberFormatter.string(from: NSNumber(value: inches))! + " in"
+            heightButton.setTitle(heightString, for: .normal)
         case .metric:
             let heightInCentimeters = bodyMeasurement.height.converted(to: UnitLength.centimeters).value
             let meter = bodyMeasurement.height.converted(to: UnitLength.meters).value.rounded(.towardZero)
             let centimeter = heightInCentimeters - meter * 100
-            heightButton.setTitle("\(meter) m \(centimeter) cm", for: .normal)
+            let heightString = heightNumberFormatter.string(from: NSNumber(value: meter))! + " m " + heightNumberFormatter.string(from: NSNumber(value: centimeter))! + " cm"
+            heightButton.setTitle(heightString, for: .normal)
         }
     }
     
@@ -371,7 +380,7 @@ class CalculatorViewController: UIViewController {
             let BMI = validResult.BMI
             BMICategoryLabel.text = validResult.category.describe()
             BMIBackground.backgroundColor = validResult.category.color()
-            BMILabel.text = numberFormatter.string(from: NSNumber(value: BMI))
+            BMILabel.text = weightNumberFormatter.string(from: NSNumber(value: BMI))
         }
     }
     
