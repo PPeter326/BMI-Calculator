@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -111,7 +110,7 @@
                                         <rect key="frame" x="0.0" y="485" width="414" height="323"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" restorationIdentifier="SegmentControl" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jTU-AZ-gAi">
-                                                <rect key="frame" x="0.0" y="0.0" width="414" height="29"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="32"/>
                                                 <segments>
                                                     <segment title="First"/>
                                                     <segment title="Second"/>
@@ -120,8 +119,8 @@
                                                     <action selector="segmentedControlTouched:" destination="BYZ-38-t0r" eventType="valueChanged" id="JXe-yq-QYn"/>
                                                 </connections>
                                             </segmentedControl>
-                                            <pickerView contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" restorationIdentifier="PickerView" translatesAutoresizingMaskIntoConstraints="NO" id="Utc-ml-qvE">
-                                                <rect key="frame" x="0.0" y="28" width="414" height="295"/>
+                                            <pickerView contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" restorationIdentifier="PickerView" translatesAutoresizingMaskIntoConstraints="NO" id="Utc-ml-qvE" customClass="BodyMeasurementPickerView" customModule="BMI_Calculator" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="31" width="414" height="292"/>
                                                 <connections>
                                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="Fx8-6w-4Sg"/>
                                                     <outlet property="delegate" destination="BYZ-38-t0r" id="rkQ-Qd-odd"/>
@@ -174,11 +173,11 @@
             <objects>
                 <viewController id="jI8-VL-nLi" customClass="DisclaimerViewController" customModule="BMI_Calculator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2mB-Sv-ohO">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="NHb-pF-K6n">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCe-Df-Hog">
                                         <rect key="frame" x="20" y="0.0" width="374" height="20.5"/>
@@ -193,14 +192,14 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html#InterpretedAdults" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="nhc-CU-O7G" userLabel="Link TextView">
-                                        <rect key="frame" x="20" y="28.5" width="374" height="741.5"/>
+                                        <rect key="frame" x="20" y="28.5" width="374" height="731.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" textContentType="url"/>
                                         <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTs-GE-hMk">
-                                        <rect key="frame" x="177" y="778" width="60" height="40"/>
+                                        <rect key="frame" x="177" y="768" width="60" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="W5t-hR-dVr"/>
                                             <constraint firstAttribute="height" constant="40" id="bRF-sG-LRs"/>

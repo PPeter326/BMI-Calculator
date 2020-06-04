@@ -15,8 +15,8 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var heightButton: UIButton!
     @IBOutlet weak var BMILabel: UILabel!
     @IBOutlet weak var BMICategoryLabel: UILabel!
-    @IBOutlet weak var pickerView: UIPickerView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var pickerView: BodyMeasurementPickerView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var BMIBackground: BackgroundView!
 
     
@@ -31,23 +31,9 @@ class CalculatorViewController: UIViewController {
      
     When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
     */
-    private var bodyMeasurement: BodyMeasurement {
-        get {
-            return BodyMeasurement(weightInLbs: weight.weightInLbs, heightInInches: height.totalHeightInInches, weightInKgs: weight.weightInKgs, totalHeightInCm: height.totalHeightCentimeters)
-        }
-        set {
-            weight.weightInLbs = newValue.weightInLbs
-            height.totalHeightInInches = newValue.totalHeightInInches
-            weight.weightInKgs = newValue.weightInKgs
-            height.totalHeightCentimeters = newValue.totalHeightInCm
-        }
-    }
+    private var bodyMeasurement: BodyMeasurement
     
     // MARK: - Weight/Height Input
-    
-    /// Keeps track of the height/weight values selected by user on pickerview, and stores the value of height/weight from Measurement Data Model.
-    private var weight = WeightPickerData()
-    private var height = HeightPickerData()
     
 
     private struct ImperialNumberPickerViewRange {
@@ -73,20 +59,7 @@ class CalculatorViewController: UIViewController {
     }()
     
     // MARK: - BMI
-    private var calculator = BMICalculator()
-    private var BMI: Double? {
-        let weightMeasurement = inputCoordinator.weightContext.system == .imperial ? weight.weightInLbs : weight.weightInKgs
-        let heightMeasurement = inputCoordinator.heightContext.system == .imperial ? height.totalHeightInInches : height.totalHeightCentimeters
-      return calculator.calculateBMI(weight: weightMeasurement, height: heightMeasurement)
-    }
-    
-    private var categoryColor: UIColor? {
-        return BMI != nil ? BMICategory.category(of: BMI!).color() : nil
-    }
-    
-    private var BMIDescription: String? {
-        return BMI != nil ? BMICategory.category(of: BMI!).describe() : nil
-    }
+    private var result: (BMIError?, BMIResult?)
     
     // MARK: - Initial Set-Up
     override func viewDidLoad() {
@@ -153,52 +126,66 @@ class CalculatorViewController: UIViewController {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // collect component data and calculate weight/height
         let currentContext = inputCoordinator.currentInputContext()!
+        
+        guard let measurementPickerView = pickerView as? BodyMeasurementPickerView else { return }
+        
         switch currentContext.type {
         case .weight:
+            var weightPicked: Measurement<UnitMass>
             if currentContext.system == .imperial {
                 switch component {
                 case 0:
-                    weight.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
+                    measurementPickerView.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weight.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
+                    measurementPickerView.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
+                weightPicked = Measurement(value: Double(measurementPickerView.poundsComponent) + Double(measurementPickerView.poundsDecimalComponent) / 10, unit: UnitMass.pounds)
             } else {
                 switch component {
                 case 0:
-                    weight.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
+                    measurementPickerView.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
                 case 1:
-                    weight.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
+                    measurementPickerView.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
                 default:
                     break
                 }
+                weightPicked = Measurement(value: Double(measurementPickerView.kilogramComponent) + Double(measurementPickerView.kilogramDecimalComponent) / 10, unit: UnitMass.kilograms)
             }
+            // update body measurement
+            bodyMeasurement.weight = weightPicked
             updateWeightButton()
+            
         case .height:
+            var heightPicked: Measurement<UnitLength>
             if currentContext.system == .imperial {
                 switch component {
                 case 0:
-                    height.feetComponent = ImperialNumberPickerViewRange.heightInFeetRange[row]
+                    measurementPickerView.feetComponent = ImperialNumberPickerViewRange.heightInFeetRange[row]
                 case 2:
-                    height.inchComponent = ImperialNumberPickerViewRange.heightInInchesRange[row]
+                    measurementPickerView.inchComponent = ImperialNumberPickerViewRange.heightInInchesRange[row]
                 default:
                     break
                 }
+                heightPicked = Measurement(value: Double(measurementPickerView.feetComponent) * 12 + Double(measurementPickerView.inchComponent), unit: UnitLength.inches)
             } else {
                 switch component {
                 case 0:
-                    height.meterComponent = MetricNumberPickerViewRange.heightInMeterRange
+                    measurementPickerView.meterComponent = MetricNumberPickerViewRange.heightInMeterRange
                 case 2:
-                    height.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
+                    measurementPickerView.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
                 default:
                     break
                 }
+                heightPicked = Measurement(value: Double(measurementPickerView.meterComponent) + Double(measurementPickerView.centimeterComponent) / 100, unit: UnitLength.meters)
             }
+            bodyMeasurement.height = heightPicked
             updateHeightButton()
         }
-        // Dynamic calculation
+        calculate() // calculate BMI
         updateBMILabels()
         // save user input
         BodyMeasurement.saveToFile(measurement: bodyMeasurement)
@@ -219,16 +206,30 @@ class CalculatorViewController: UIViewController {
     
     private func pickerViewSelectsWeight() {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
+            
+            var weight = bodyMeasurement.weight
             if activeContext.system == .imperial {
-                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.poundsComponent)!
-                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.poundsDecimalComponent)!
-                pickerView.selectRow(weightInLbsWholeNumberIndex, inComponent: 0, animated: false)
-                pickerView.selectRow(weightInLbsDecimalIndex, inComponent: 1, animated: false)
+                
+                weight.convert(to: UnitMass.pounds)
+                let pounds = weight.value
+                let poundsDecimal = pounds.truncatingRemainder(dividingBy: 10)
+                
+                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(pounds.rounded(.towardZero)))
+                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(poundsDecimal))
+                
+                pickerView.selectRow(weightInLbsWholeNumberIndex!, inComponent: 0, animated: false)
+                pickerView.selectRow(weightInLbsDecimalIndex!, inComponent: 1, animated: false)
             } else {
-                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: weight.kilogramComponent)!
-                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: weight.kilogramDecimalComponent)!
-                pickerView.selectRow(weightInKgWholeNumberIndex, inComponent: 0, animated: false)
-                pickerView.selectRow(weightInKgDecimalIndex, inComponent: 1, animated: false)
+                
+                weight.convert(to: UnitMass.kilograms)
+                let kg = weight.value
+                let kgDecimal = kg.truncatingRemainder(dividingBy: 10)
+                
+                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(kg.rounded(.towardZero)))
+                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(kgDecimal))
+                
+                pickerView.selectRow(weightInKgWholeNumberIndex!, inComponent: 0, animated: false)
+                pickerView.selectRow(weightInKgDecimalIndex!, inComponent: 1, animated: false)
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
@@ -238,20 +239,38 @@ class CalculatorViewController: UIViewController {
     private func pickerViewSelectsHeight() {
         
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
+            
+            var height = bodyMeasurement.height
+            
             if activeContext.system == .imperial {
-                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: height.feetComponent)!
-                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: height.inchComponent)!
-                pickerView.selectRow(heightInFeetIndex, inComponent: 0, animated: false)
-                pickerView.selectRow(heightInInchIndex, inComponent: 2, animated: false)
+                
+                height.convert(to: UnitLength.feet)
+                let ft = height.value.rounded(.towardZero)
+                let inches = height.converted(to: UnitLength.inches).value - ft * 12
+                
+                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: Int(ft))
+                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: Int(inches))
+                
+                pickerView.selectRow(heightInFeetIndex!, inComponent: 0, animated: false)
+                pickerView.selectRow(heightInInchIndex!, inComponent: 2, animated: false)
             } else {
+                height.convert(to: UnitLength.meters)
+                let meters = height.value.rounded(.towardZero)
+                let centimeters = height.converted(to: UnitLength.centimeters).value - meters * 100
+                
                 let heightInMeterIndex = 0
-                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: height.centimeterComponent)!
+                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: Int(centimeters))
                 pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
-                pickerView.selectRow(heightInCentimeterIndex, inComponent: 2, animated: false)
+                pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: false)
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
         }
+    }
+    
+    // calculation
+    private func calculate() {
+        result = BMICalculator.calculate(weight: bodyMeasurement.weight, height: bodyMeasurement.height)
     }
     
     // MARK: - UI Update
@@ -274,9 +293,9 @@ class CalculatorViewController: UIViewController {
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.weightContext.system {
         case .imperial:
-            weightButton.setTitle("\(weight.poundsComponent).\(weight.poundsDecimalComponent) lbs", for: .normal)
+            weightButton.setTitle("\(bodyMeasurement.weight.converted(to: UnitMass.pounds).value) lbs", for: .normal)
         case .metric:
-            weightButton.setTitle("\(weight.kilogramComponent).\(weight.kilogramDecimalComponent) kg", for: .normal)
+            weightButton.setTitle("\(bodyMeasurement.weight.converted(to: UnitMass.kilograms).value) kg", for: .normal)
         }
     }
     
@@ -290,9 +309,15 @@ class CalculatorViewController: UIViewController {
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.heightContext.system {
         case .imperial:
-            heightButton.setTitle("\(height.feetComponent) ft \(height.inchComponent) in", for: .normal)
+            let heightInInches = bodyMeasurement.height.converted(to: UnitLength.inches).value
+            let feet =  bodyMeasurement.height.converted(to: UnitLength.feet).value.rounded(.towardZero)
+            let inches = heightInInches - feet * 12
+            heightButton.setTitle("\(feet) ft \(inches) in", for: .normal)
         case .metric:
-            heightButton.setTitle("\(height.meterComponent) m \(height.centimeterComponent) cm", for: .normal)
+            let heightInCentimeters = bodyMeasurement.height.converted(to: UnitLength.centimeters).value
+            let meter = bodyMeasurement.height.converted(to: UnitLength.meters).value.rounded(.towardZero)
+            let centimeter = heightInCentimeters - meter * 100
+            heightButton.setTitle("\(meter) m \(centimeter) cm", for: .normal)
         }
     }
     
@@ -330,14 +355,19 @@ class CalculatorViewController: UIViewController {
     
     func updateBMILabels() {
         // update BMI Label
-        if let BMI = BMI, let BMIDescription = BMIDescription {
-            BMILabel.text = numberFormatter.string(from: NSNumber(value: BMI))
-            BMICategoryLabel.text = "\(BMIDescription)"
-            BMIBackground.backgroundColor = categoryColor
-        } else {
+        if let error = result.0 {
             BMILabel.text = "N/A"
-            BMICategoryLabel.text = "We can't calculate based on your height and weight"
             BMIBackground.backgroundColor = UIColor.lightGray
+            if error == BMIError.invalidHeight {
+                BMICategoryLabel.text = "Height is out of range for accurate calculation"
+            } else if error == BMIError.invalidWeight {
+                BMICategoryLabel.text = "Weight is out of range for accurate calculation"
+            }
+        } else if let validResult = result.1 {
+            let BMI = validResult.BMI
+            BMICategoryLabel.text = validResult.category.describe()
+            BMIBackground.backgroundColor = validResult.category.color()
+            BMILabel.text = numberFormatter.string(from: NSNumber(value: BMI))
         }
     }
     

@@ -13,19 +13,16 @@ import Foundation
 struct BodyMeasurement: Codable, CustomStringConvertible {
     
     var description: String {
-        return "Imperial: \(weightInLbs.value) lbs \(totalHeightInInches.value) inches, Metric: \(weightInKgs.value) kgs, \(totalHeightInCm.value) cm"
+        return "weight: \(weight.value) \(weight.unit) height: \(height.value) \(height.unit)"
     }
     
-    var weightInLbs: Measurement<UnitMass>
-    var totalHeightInInches: Measurement<UnitLength>
-    var weightInKgs: Measurement<UnitMass>
-    var totalHeightInCm: Measurement<UnitLength>
+    var weight: Measurement<UnitMass>
+    var height: Measurement<UnitLength>
+
     
-    init(weightInLbs: Measurement<UnitMass>, heightInInches: Measurement<UnitLength>, weightInKgs: Measurement<UnitMass>, totalHeightInCm: Measurement<UnitLength>) {
-        self.weightInLbs = weightInLbs
-        self.totalHeightInInches = heightInInches
-        self.weightInKgs = weightInKgs
-        self.totalHeightInCm = totalHeightInCm
+    init(weight: Measurement<UnitMass>, height: Measurement<UnitLength>) {
+        self.weight = weight
+        self.height = height
     }
     
     
@@ -67,7 +64,7 @@ struct BodyMeasurement: Codable, CustomStringConvertible {
     ///
     /// - Returns: Measurement struct with predefined sample weight and height data
     static func loadSampleMeasurement() -> BodyMeasurement {
-        let sampleMeasurement = BodyMeasurement(weightInLbs: Measurement(value: 170, unit: UnitMass.pounds), heightInInches: Measurement(value: 72, unit: UnitLength.inches), weightInKgs: Measurement(value: 83, unit: UnitMass.kilograms), totalHeightInCm: Measurement(value: 170, unit: UnitLength.centimeters))
+        let sampleMeasurement = BodyMeasurement(weight: Measurement(value: 170, unit: UnitMass.pounds), height: Measurement(value: 72, unit: UnitLength.inches))
         return sampleMeasurement
     }
     
