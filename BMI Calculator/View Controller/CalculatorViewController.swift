@@ -293,9 +293,13 @@ class CalculatorViewController: UIViewController {
         // update button title dpeneding on measurement system selected by user
         switch inputCoordinator.weightContext.system {
         case .imperial:
-            weightButton.setTitle("\(bodyMeasurement.weight.converted(to: UnitMass.pounds).value) lbs", for: .normal)
+            let weight = bodyMeasurement.weight.converted(to: UnitMass.pounds).value
+            let weightString = numberFormatter.string(from: NSNumber(value: weight))
+            weightButton.setTitle("\(weightString!) lbs", for: .normal)
         case .metric:
-            weightButton.setTitle("\(bodyMeasurement.weight.converted(to: UnitMass.kilograms).value) kg", for: .normal)
+            let weight = bodyMeasurement.weight.converted(to: UnitMass.kilograms).value
+            let weightString = numberFormatter.string(from: NSNumber(value: weight))
+            weightButton.setTitle("\(weightString!) kg", for: .normal)
         }
     }
     
