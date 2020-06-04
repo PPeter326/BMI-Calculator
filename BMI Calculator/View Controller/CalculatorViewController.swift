@@ -219,9 +219,10 @@ class CalculatorViewController: UIViewController {
                 
                 weight.convert(to: UnitMass.pounds)
                 let pounds = weight.value
-                let poundsDecimal = pounds.truncatingRemainder(dividingBy: 10)
+                let poundsWholeNumber = pounds.rounded(.towardZero)
+                let poundsDecimal = (pounds - poundsWholeNumber) * 10
                 
-                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(pounds.rounded(.towardZero)))
+                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(poundsWholeNumber))
                 let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(poundsDecimal))
                 
                 pickerView.selectRow(weightInLbsWholeNumberIndex!, inComponent: 0, animated: false)
@@ -230,9 +231,10 @@ class CalculatorViewController: UIViewController {
                 
                 weight.convert(to: UnitMass.kilograms)
                 let kg = weight.value
-                let kgDecimal = kg.truncatingRemainder(dividingBy: 10)
+                let kgWholeNumber = kg.rounded(.towardZero)
+                let kgDecimal = (kg - kgWholeNumber) * 10
                 
-                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(kg.rounded(.towardZero)))
+                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(kgWholeNumber))
                 let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(kgDecimal))
                 
                 pickerView.selectRow(weightInKgWholeNumberIndex!, inComponent: 0, animated: false)
