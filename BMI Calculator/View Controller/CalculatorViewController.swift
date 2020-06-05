@@ -72,6 +72,9 @@ class CalculatorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let color = UIColor(named: "BackgroundColor")
+        view.backgroundColor = color
+        
         // Initial set up
         if let measurement = BodyMeasurement.loadFromFile() {
             bodyMeasurement = measurement
