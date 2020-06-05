@@ -256,22 +256,22 @@ class CalculatorViewController: UIViewController {
             
             if activeContext.system == .imperial {
                 
-                height.convert(to: UnitLength.feet)
-                let ft = height.value.rounded(.towardZero)
-                let inches = height.converted(to: UnitLength.inches).value - ft * 12
+                height.convert(to: UnitLength.inches) // converts height to inch so it can be rounded
+                let heightInInches = Int(height.value.rounded())
+                let (ft, inches) = heightInInches.quotientAndRemainder(dividingBy: 12)
                 
-                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: Int(ft))
-                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: Int(inches))
+                let heightInFeetIndex = ImperialNumberPickerViewRange.heightInFeetRange.firstIndex(of: ft)
+                let heightInInchIndex = ImperialNumberPickerViewRange.heightInInchesRange.firstIndex(of: inches)
                 
                 pickerView.selectRow(heightInFeetIndex!, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInInchIndex!, inComponent: 2, animated: false)
             } else {
-                height.convert(to: UnitLength.meters)
-                let meters = height.value.rounded(.towardZero)
-                let centimeters = height.converted(to: UnitLength.centimeters).value - meters * 100
+                height.convert(to: UnitLength.centimeters)
+                let heightInCentimeters = Int(height.value.rounded())
+                let (_, centimeters) = heightInCentimeters.quotientAndRemainder(dividingBy: 100)
                 
                 let heightInMeterIndex = 0
-                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: Int(centimeters))
+                let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: centimeters)
                 pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: false)
             }
