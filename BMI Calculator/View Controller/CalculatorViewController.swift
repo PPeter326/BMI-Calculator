@@ -136,6 +136,7 @@ class CalculatorViewController: UIViewController {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print(#function)
         // collect component data and calculate weight/height
         let currentContext = inputCoordinator.currentInputContext()!
         
@@ -221,27 +222,32 @@ class CalculatorViewController: UIViewController {
             if activeContext.system == .imperial {
                 
                 weight.convert(to: UnitMass.pounds)
-                let pounds = weight.value
-                let poundsWholeNumber = pounds.rounded(.towardZero)
-                let poundsDecimal = (pounds - poundsWholeNumber) * 10
+                let pounds = Int((weight.value * 10).rounded()) // This is to help us get more accurate number
+                let (wholeNumber, decimal) = pounds.quotientAndRemainder(dividingBy: 10)
                 
-                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(poundsWholeNumber))
-                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(poundsDecimal))
+                let weightInLbsWholeNumberIndex = ImperialNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: wholeNumber)
+                let weightInLbsDecimalIndex = ImperialNumberPickerViewRange.weightDecimalRange.firstIndex(of: decimal)
                 
                 pickerView.selectRow(weightInLbsWholeNumberIndex!, inComponent: 0, animated: false)
                 pickerView.selectRow(weightInLbsDecimalIndex!, inComponent: 1, animated: false)
+                
+                // pickerVIew update its selection for each component
+                pickerView.poundsComponent = wholeNumber
+                pickerView.poundsDecimalComponent = decimal
             } else {
                 
                 weight.convert(to: UnitMass.kilograms)
-                let kg = weight.value
-                let kgWholeNumber = kg.rounded(.towardZero)
-                let kgDecimal = (kg - kgWholeNumber) * 10
+                let kg = Int((weight.value * 10).rounded())
+                let (wholeNumber, decimal) = kg.quotientAndRemainder(dividingBy: 10)
                 
-                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: Int(kgWholeNumber))
-                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: Int(kgDecimal))
+                let weightInKgWholeNumberIndex = MetricNumberPickerViewRange.weightWholeNumberRange.firstIndex(of: wholeNumber)
+                let weightInKgDecimalIndex = MetricNumberPickerViewRange.weightDecimalRange.firstIndex(of: decimal)
                 
                 pickerView.selectRow(weightInKgWholeNumberIndex!, inComponent: 0, animated: false)
                 pickerView.selectRow(weightInKgDecimalIndex!, inComponent: 1, animated: false)
+                
+                pickerView.kilogramComponent = wholeNumber
+                pickerView.poundsDecimalComponent = decimal
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
@@ -265,6 +271,10 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(heightInFeetIndex!, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInInchIndex!, inComponent: 2, animated: false)
+                
+                // update pickerview components
+                pickerView.feetComponent = ft
+                pickerView.inchComponent = inches
             } else {
                 height.convert(to: UnitLength.centimeters)
                 let heightInCentimeters = Int(height.value.rounded())
@@ -272,8 +282,11 @@ class CalculatorViewController: UIViewController {
                 
                 let heightInMeterIndex = 0
                 let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: centimeters)
+                
                 pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: false)
+                
+                pickerView.centimeterComponent = centimeters
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
@@ -323,18 +336,24 @@ class CalculatorViewController: UIViewController {
             heightButton.setTitleColor(#colorLiteral(red: 0.4756349325, green: 0.4756467342, blue: 0.4756404161, alpha: 1), for: .normal)
         }
         // update button title dpeneding on measurement system selected by user
+        var height = bodyMeasurement.height
+        
         switch inputCoordinator.heightContext.system {
+            
         case .imperial:
-            let heightInInches = bodyMeasurement.height.converted(to: UnitLength.inches).value
-            let feet =  bodyMeasurement.height.converted(to: UnitLength.feet).value.rounded(.towardZero)
-            let inches = heightInInches - feet * 12
-            let heightString = heightNumberFormatter.string(from: NSNumber(value: feet))! + " ft " + heightNumberFormatter.string(from: NSNumber(value: inches))! + " in"
+            height.convert(to: UnitLength.inches) // converts height to inch so it can be rounded
+            let heightInInches = Int(height.value.rounded())
+            let (ft, inches) = heightInInches.quotientAndRemainder(dividingBy: 12)
+
+            let heightString = heightNumberFormatter.string(from: NSNumber(value: ft))! + " ft " + heightNumberFormatter.string(from: NSNumber(value: inches))! + " in"
             heightButton.setTitle(heightString, for: .normal)
+            
         case .metric:
-            let heightInCentimeters = bodyMeasurement.height.converted(to: UnitLength.centimeters).value
-            let meter = bodyMeasurement.height.converted(to: UnitLength.meters).value.rounded(.towardZero)
-            let centimeter = heightInCentimeters - meter * 100
-            let heightString = heightNumberFormatter.string(from: NSNumber(value: meter))! + " m " + heightNumberFormatter.string(from: NSNumber(value: centimeter))! + " cm"
+            height.convert(to: UnitLength.centimeters)
+            let heightInCentimeters = Int(height.value.rounded())
+            let (meters, centimeters) = heightInCentimeters.quotientAndRemainder(dividingBy: 100)
+            
+            let heightString = heightNumberFormatter.string(from: NSNumber(value: meters))! + " m " + heightNumberFormatter.string(from: NSNumber(value: centimeters))! + " cm"
             heightButton.setTitle(heightString, for: .normal)
         }
     }
