@@ -46,8 +46,8 @@ class CalculatorViewController: UIViewController {
     private struct MetricNumberPickerViewRange {
         static let weightWholeNumberRange = Array(40...200)
         static let weightDecimalRange = Array(0...9)
-        static let heightInMeterRange = 1
-        static let heightInCentimeterRange = Array(40...99)
+        static let heightInMeterRange = Array(1...2)
+        static let heightInCentimeterRange = Array(0...99)
     }
     
     // MARK: - Formatter
@@ -81,6 +81,7 @@ class CalculatorViewController: UIViewController {
         } else {
             bodyMeasurement = BodyMeasurement.loadSampleMeasurement()
         }
+        calculate()
         updateAllUI()
         
     }
@@ -136,7 +137,6 @@ class CalculatorViewController: UIViewController {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(#function)
         // collect component data and calculate weight/height
         let currentContext = inputCoordinator.currentInputContext()!
         
@@ -185,7 +185,7 @@ class CalculatorViewController: UIViewController {
             } else {
                 switch component {
                 case 0:
-                    measurementPickerView.meterComponent = MetricNumberPickerViewRange.heightInMeterRange
+                    measurementPickerView.meterComponent = MetricNumberPickerViewRange.heightInMeterRange[row]
                 case 2:
                     measurementPickerView.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
                 default:
@@ -278,12 +278,12 @@ class CalculatorViewController: UIViewController {
             } else {
                 height.convert(to: UnitLength.centimeters)
                 let heightInCentimeters = Int(height.value.rounded())
-                let (_, centimeters) = heightInCentimeters.quotientAndRemainder(dividingBy: 100)
+                let (meters, centimeters) = heightInCentimeters.quotientAndRemainder(dividingBy: 100)
                 
-                let heightInMeterIndex = 0
+                let heightInMeterIndex = MetricNumberPickerViewRange.heightInMeterRange.firstIndex(of: meters)
                 let heightInCentimeterIndex = MetricNumberPickerViewRange.heightInCentimeterRange.firstIndex(of: centimeters)
                 
-                pickerView.selectRow(heightInMeterIndex, inComponent: 0, animated: false)
+                pickerView.selectRow(heightInMeterIndex!, inComponent: 0, animated: false)
                 pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: false)
                 
                 pickerView.centimeterComponent = centimeters
@@ -458,7 +458,7 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
             } else {
                 switch component {
                 case 0:
-                    return String(MetricNumberPickerViewRange.heightInMeterRange)
+                    return "\(MetricNumberPickerViewRange.heightInMeterRange[row])"
                 case 1:
                     return "m"
                 case 2:
@@ -528,7 +528,7 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
             } else {
                 switch component {
                 case 0:
-                    return 1
+                    return MetricNumberPickerViewRange.heightInMeterRange.count
                 case 1:
                     return 1
                 case 2:
