@@ -144,8 +144,6 @@ class CalculatorViewController: UIViewController {
         // collect component data and calculate weight/height
         let currentContext = inputCoordinator.currentInputContext()!
         
-        guard let measurementPickerView = pickerView as? BodyMeasurementPickerView else { return }
-        
         switch currentContext.type {
         case .weight:
             var weightPicked: Measurement<UnitMass>
