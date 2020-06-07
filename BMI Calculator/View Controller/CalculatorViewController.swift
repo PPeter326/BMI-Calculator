@@ -177,26 +177,16 @@ class CalculatorViewController: UIViewController {
         case .height:
             var heightPicked: Measurement<UnitLength>
             if currentContext.system == .imperial {
-                switch component {
-                case 0:
-                    measurementPickerView.feetComponent = ImperialNumberPickerViewRange.heightInFeetRange[row]
-                case 2:
-                    measurementPickerView.inchComponent = ImperialNumberPickerViewRange.heightInInchesRange[row]
-                default:
-                    break
-                }
-                heightPicked = Measurement(value: Double(measurementPickerView.feetComponent) * 12 + Double(measurementPickerView.inchComponent), unit: UnitLength.inches)
+                let heightHighNumber = ImperialNumberPickerViewRange.heightInFeetRange[pickerView.selectedRow(inComponent: PickerViewLayout.heightHighNumber)]
+                let heightLowNumber = ImperialNumberPickerViewRange.heightInInchesRange[pickerView.selectedRow(inComponent: PickerViewLayout.heightLowNumber)]
+                
+                heightPicked = Measurement(value: Double(heightHighNumber) * 12 + Double(heightLowNumber), unit: UnitLength.inches)
             } else {
-                switch component {
-                case 0:
-                    measurementPickerView.meterComponent = MetricNumberPickerViewRange.heightInMeterRange[row]
-                case 2:
-                    measurementPickerView.centimeterComponent = MetricNumberPickerViewRange.heightInCentimeterRange[row]
-                default:
-                    break
-                }
-                heightPicked = Measurement(value: Double(measurementPickerView.meterComponent) + Double(measurementPickerView.centimeterComponent) / 100, unit: UnitLength.meters)
+                let heightHighNumber = MetricNumberPickerViewRange.heightInMeterRange[pickerView.selectedRow(inComponent: PickerViewLayout.heightHighNumber)]
+                let heightLowNumber = MetricNumberPickerViewRange.heightInCentimeterRange[pickerView.selectedRow(inComponent: PickerViewLayout.heightLowNumber)]
+                heightPicked = Measurement(value: Double(heightHighNumber) + Double(heightLowNumber) / 100, unit: UnitLength.meters)
             }
+            
             // Reset pickerview if height picked is not within range
             if !MeasurementRange.heightRange.contains(heightPicked) {
                 if heightPicked < MeasurementRange.heightRange.lowerBound {
@@ -284,9 +274,6 @@ class CalculatorViewController: UIViewController {
                 pickerView.selectRow(heightInFeetIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(heightInInchIndex!, inComponent: 2, animated: true)
                 
-                // update pickerview components
-                pickerView.feetComponent = ft
-                pickerView.inchComponent = inches
             } else {
                 height.convert(to: UnitLength.centimeters)
                 let heightInCentimeters = Int(height.value.rounded())
@@ -298,9 +285,6 @@ class CalculatorViewController: UIViewController {
                 pickerView.selectRow(heightInMeterIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: true)
                 
-                // update pickerview components
-                pickerView.meterComponent = meters
-                pickerView.centimeterComponent = centimeters
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
