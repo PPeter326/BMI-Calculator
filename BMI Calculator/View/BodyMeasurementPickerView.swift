@@ -30,6 +30,17 @@ class BodyMeasurementPickerView: UIPickerView {
     var meterComponent:Int = 1
     /// Holds value from centimeter component in pickerview
     var centimeterComponent: Int = 60
+    
+    // weight picker layout
+    static let weightWholeNumber = 0
+    static let weightDecimal = 1
+    static let weightUnit = 2
+    
+    // height picker layout
+    static let heightHighNumber = 0
+    static let heightHighUnit = 1
+    static let heightLowNumber = 2
+    static let heightLowUnit = 3
 
     /*
     // Only override draw() if you perform custom drawing.

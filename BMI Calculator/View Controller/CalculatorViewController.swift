@@ -441,43 +441,47 @@ class CalculatorViewController: UIViewController {
     
 }
 
+struct PickerViewLayout {
+    // weight picker layout
+    static let weightWholeNumber = 0
+    static let weightDecimal = 1
+    static let weightUnit = 2
+    
+    // height picker layout
+    static let heightHighNumber = 0
+    static let heightHighUnit = 1
+    static let heightLowNumber = 2
+    static let heightLowUnit = 3
+}
+
 // MARK: -
 extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: PickerView setup/datasource
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let currentContext = inputCoordinator.currentInputContext()!
-        // weight picker layout
-        let weightWholeNumber = 0
-        let weightDecimal = 1
-        let weightUnit = 2
         
-        // height picker layout
-        let heightHighNumber = 0
-        let heightHighUnit = 1
-        let heightLowNumber = 2
-        let heightLowUnit = 3
         
         switch currentContext.type {
         case .weight:
             if currentContext.system == .imperial {
                 switch component {
-                case weightWholeNumber:
+                case PickerViewLayout.weightWholeNumber:
                     return String(ImperialNumberPickerViewRange.weightWholeNumberRange[row])
-                case weightDecimal:
+                case PickerViewLayout.weightDecimal:
                     return ".\(ImperialNumberPickerViewRange.weightDecimalRange[row])"
-                case weightUnit:
+                case PickerViewLayout.weightUnit:
                     return "lbs"
                 default:
                     return nil
                 }
             } else {
                 switch component {
-                case weightWholeNumber:
+                case PickerViewLayout.weightWholeNumber:
                     return String(MetricNumberPickerViewRange.weightWholeNumberRange[row])
-                case weightDecimal:
+                case PickerViewLayout.weightDecimal:
                     return ".\(MetricNumberPickerViewRange.weightDecimalRange[row])"
-                case weightUnit:
+                case PickerViewLayout.weightUnit:
                     return "kg"
                 default:
                     return nil
@@ -486,26 +490,26 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
         case .height:
             if currentContext.system == .imperial {
                 switch component {
-                case heightHighNumber:
+                case PickerViewLayout.heightHighNumber:
                     return String(ImperialNumberPickerViewRange.heightInFeetRange[row])
-                case heightHighUnit:
+                case PickerViewLayout.heightHighUnit:
                     return "ft"
-                case heightLowNumber:
+                case PickerViewLayout.heightLowNumber:
                     return "\(ImperialNumberPickerViewRange.heightInInchesRange[row])"
-                case heightLowUnit:
+                case PickerViewLayout.heightLowUnit:
                     return "in"
                 default:
                     return nil
                 }
             } else {
                 switch component {
-                case heightHighNumber:
+                case PickerViewLayout.heightHighNumber:
                     return "\(MetricNumberPickerViewRange.heightInMeterRange[row])"
-                case heightHighUnit:
+                case PickerViewLayout.heightHighUnit:
                     return "m"
-                case heightLowNumber:
+                case PickerViewLayout.heightLowNumber:
                     return "\(MetricNumberPickerViewRange.heightInCentimeterRange[row])"
-                case heightLowUnit:
+                case PickerViewLayout.heightLowUnit:
                     return "cm"
                 default:
                     return nil
@@ -534,49 +538,53 @@ extension CalculatorViewController: UIPickerViewDelegate, UIPickerViewDataSource
         case .weight:
             if currentContext.system == .imperial {
                 switch component {
-                case 0:
+                case PickerViewLayout.weightWholeNumber:
                     return ImperialNumberPickerViewRange.weightWholeNumberRange.count
-                case 1:
+                case PickerViewLayout.weightDecimal:
                     return ImperialNumberPickerViewRange.weightDecimalRange.count
-                case 2:
+                case PickerViewLayout.weightUnit:
                     return 1
                 default:
-                    return 1
+                    return 0
                 }
             } else {
                 switch component {
-                case 0:
+                case PickerViewLayout.weightWholeNumber:
                     return MetricNumberPickerViewRange.weightWholeNumberRange.count
-                case 1:
+                case PickerViewLayout.weightDecimal:
                     return MetricNumberPickerViewRange.weightDecimalRange.count
-                case 2:
+                case PickerViewLayout.weightUnit:
                     return 1
                 default:
-                    return 1
+                    return 0
                 }
             }
         case .height:
             if currentContext.system == .imperial {
                 switch component {
-                case 0:
+                case PickerViewLayout.heightHighNumber:
                     return ImperialNumberPickerViewRange.heightInFeetRange.count
-                case 1:
+                case PickerViewLayout.heightHighUnit:
                     return 1
-                case 2:
+                case PickerViewLayout.heightLowNumber:
                     return ImperialNumberPickerViewRange.heightInInchesRange.count
-                default:
+                case PickerViewLayout.heightLowUnit:
                     return 1
+                default:
+                    return 0
                 }
             } else {
                 switch component {
-                case 0:
+                case PickerViewLayout.heightHighNumber:
                     return MetricNumberPickerViewRange.heightInMeterRange.count
-                case 1:
+                case PickerViewLayout.heightHighUnit:
                     return 1
-                case 2:
+                case PickerViewLayout.heightLowNumber:
                     return MetricNumberPickerViewRange.heightInCentimeterRange.count
-                default:
+                case PickerViewLayout.heightLowUnit:
                     return 1
+                default:
+                    return 0
                 }
             }
         }
