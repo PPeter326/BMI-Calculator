@@ -11,14 +11,6 @@ import UIKit
 class BodyMeasurementPickerView: UIPickerView {
     
     /// Holds value from pounds component in pickerview
-    var poundsComponent: Int = 170
-    /// Holds value from pounds decimal component in pickerview
-    var poundsDecimalComponent: Int = 0
-    
-    /// Holds value from kilogram component in pickerview
-    var kilogramComponent = 50
-    /// Holds value from kilogram decimal component in pickerview
-    var kilogramDecimalComponent = 9
     
     /// Holds value from feet component in pickerview
     var feetComponent: Int = 5

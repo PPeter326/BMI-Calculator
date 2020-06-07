@@ -150,25 +150,13 @@ class CalculatorViewController: UIViewController {
         case .weight:
             var weightPicked: Measurement<UnitMass>
             if currentContext.system == .imperial {
-                switch component {
-                case 0:
-                    measurementPickerView.poundsComponent = ImperialNumberPickerViewRange.weightWholeNumberRange[row]
-                case 1:
-                    measurementPickerView.poundsDecimalComponent = ImperialNumberPickerViewRange.weightDecimalRange[row]
-                default:
-                    break
-                }
-                weightPicked = Measurement(value: Double(measurementPickerView.poundsComponent) + Double(measurementPickerView.poundsDecimalComponent) / 10, unit: UnitMass.pounds)
+                let weightWholeNumber = ImperialNumberPickerViewRange.weightWholeNumberRange[pickerView.selectedRow(inComponent: PickerViewLayout.weightWholeNumber)]
+                let weightDecimalNumber = ImperialNumberPickerViewRange.weightDecimalRange[pickerView.selectedRow(inComponent: PickerViewLayout.weightDecimal)]
+                weightPicked = Measurement(value: Double(weightWholeNumber) + Double(weightDecimalNumber) / 10, unit: UnitMass.pounds)
             } else {
-                switch component {
-                case 0:
-                    measurementPickerView.kilogramComponent = MetricNumberPickerViewRange.weightWholeNumberRange[row]
-                case 1:
-                    measurementPickerView.kilogramDecimalComponent = MetricNumberPickerViewRange.weightDecimalRange[row]
-                default:
-                    break
-                }
-                weightPicked = Measurement(value: Double(measurementPickerView.kilogramComponent) + Double(measurementPickerView.kilogramDecimalComponent) / 10, unit: UnitMass.kilograms)
+                let weightWholeNumber = MetricNumberPickerViewRange.weightWholeNumberRange[pickerView.selectedRow(inComponent: PickerViewLayout.weightWholeNumber)]
+                let weightDecimalNumber = MetricNumberPickerViewRange.weightDecimalRange[pickerView.selectedRow(inComponent: PickerViewLayout.weightDecimal)]
+                weightPicked = Measurement(value: Double(weightWholeNumber) + Double(weightDecimalNumber) / 10, unit: UnitMass.kilograms)
             }
             // Reset pickerview if weight picked is not within range
             if !MeasurementRange.weightRange.contains(weightPicked) {
@@ -259,10 +247,7 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(weightInLbsWholeNumberIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(weightInLbsDecimalIndex!, inComponent: 1, animated: true)
-                
-                // pickerVIew update its selection for each component
-                pickerView.poundsComponent = wholeNumber
-                pickerView.poundsDecimalComponent = decimal
+
             } else {
                 
                 weight.convert(to: UnitMass.kilograms)
@@ -274,9 +259,7 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(weightInKgWholeNumberIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(weightInKgDecimalIndex!, inComponent: 1, animated: true)
-                
-                pickerView.kilogramComponent = wholeNumber
-                pickerView.poundsDecimalComponent = decimal
+
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
