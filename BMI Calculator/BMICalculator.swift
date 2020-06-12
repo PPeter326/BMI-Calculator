@@ -10,31 +10,31 @@ import Foundation
 
 enum BMICategory {
     
-    case underweight, normalWeight, overweight, obesity
+    case underWeight, normalWeight, overWeight, obese
     
     func describe() -> String {
         switch self {
-        case .underweight:
-            return "Underweight BMI"
+        case .underWeight:
+            return "Underweight"
         case .normalWeight:
-            return "Normal Weight BMI"
-        case .overweight:
-            return "Overweight BMI"
-        case .obesity:
-            return "Obesity BMI"
+            return "Normal Weight"
+        case .overWeight:
+            return "Overweight"
+        case .obese:
+            return "Obese"
         }
     }
     
     static func category(of BMI: Double) -> BMICategory {
         switch BMI {
         case 0..<18.5:
-            return .underweight
+            return .underWeight
         case 18.5..<25:
             return .normalWeight
         case 25..<30:
-            return .overweight
+            return .overWeight
         case 30...:
-            return .obesity
+            return .obese
         default:
             fatalError("BMICategory - invalid BMI") // should never happen
         }
@@ -64,6 +64,11 @@ struct BMIResult: CustomStringConvertible {
 class BMICalculator {
 
     
+    /// The calculation does not assume validation of weight/height input and therefore returns error and result
+    /// - Parameters:
+    ///   - weight: in UnitMass
+    ///   - height: in UnitLength
+    /// - Returns: Error if weight and height are out of range
     final class func calculate(weight: Measurement<UnitMass>, height: Measurement<UnitLength>) -> (BMIError?, BMIResult?) {
 
         do {
@@ -78,6 +83,20 @@ class BMICalculator {
             fatalError("BMICalculator - Invalid error case")
         }
     }
+    
+    
+    /// The calculation assume weight and height input are valid, and therefore only return result.  If inputs are invalid, the program will crash.
+    /// - Parameters:
+    ///   - weight: in UnitMass
+    ///   - height: in UnitLength
+    /// - Returns: BMI
+    final class func calculate(weight: Measurement<UnitMass>, height: Measurement<UnitLength>) -> BMIResult {
+        let BMI = try! calculateBMI(weight: weight, height: height) // Assume no error from calculation
+        let result = BMIResult(BMI: BMI)
+        return result
+    }
+    
+    
     
     /// Calculates BMI based on weight in kg and height in meters.  The formula is BMI = kg / m^2
     /// Precondition: the values are within height and weight range established in NIH BMI table
@@ -98,9 +117,9 @@ class BMICalculator {
     
     /// Valid height ranges in inches
     /// based on *Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults: The Evidence Report.*
-    private static let validHeightRangeInInches = 58.0...76.0
+    static let validHeightRangeInInches = 57.0...83.0
     
     /// Valid weight height ranges in lbs
     /// based on *Clinical Guidelines on the Identification, Evaluation, and Treatment of Overweight and Obesity in Adults: The Evidence Report.*
-    private static let validWeightRangeInLbs = 91.0...443.0
+    static let validWeightRangeInLbs = 91.0...443.0
 }

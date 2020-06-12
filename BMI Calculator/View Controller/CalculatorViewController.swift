@@ -36,8 +36,8 @@ class CalculatorViewController: UIViewController {
     // MARK: - Weight/Height Input
     
     private struct MeasurementRange {
-        static let heightRange = Measurement(value: 57.0, unit: UnitLength.inches)...Measurement(value: 83.0, unit: UnitLength.inches)
-        static let weightRange = Measurement(value: 91.0, unit: UnitMass.pounds)...Measurement(value: 443.0, unit: UnitMass.pounds)
+        static let heightRange = Measurement(value: BMICalculator.validHeightRangeInInches.lowerBound, unit: UnitLength.inches)...Measurement(value: BMICalculator.validHeightRangeInInches.upperBound, unit: UnitLength.inches)
+        static let weightRange = Measurement(value: BMICalculator.validWeightRangeInLbs.lowerBound, unit: UnitMass.pounds)...Measurement(value: BMICalculator.validWeightRangeInLbs.upperBound, unit: UnitMass.pounds)
     }
     
     private struct ImperialNumberPickerViewRange {
@@ -70,7 +70,7 @@ class CalculatorViewController: UIViewController {
     }()
     
     // MARK: - BMI
-    private var result: (BMIError?, BMIResult?)
+    private var result: BMIResult!
     
     // MARK: - Initial Set-Up
     override func viewDidLoad() {
@@ -388,19 +388,13 @@ class CalculatorViewController: UIViewController {
     
     func updateBMILabels() {
         // update BMI Label
-        if let error = result.0 {
-            BMILabel.text = "N/A"
-            BMIBackground.backgroundColor = UIColor.lightGray
-            if error == BMIError.invalidHeight {
-                BMICategoryLabel.text = "Height is out of range for accurate calculation"
-            } else if error == BMIError.invalidWeight {
-                BMICategoryLabel.text = "Weight is out of range for accurate calculation"
-            }
-        } else if let validResult = result.1 {
+        if let validResult = result {
             let BMI = validResult.BMI
             BMICategoryLabel.text = validResult.category.describe()
             BMIBackground.backgroundColor = validResult.category.color()
             BMILabel.text = weightNumberFormatter.string(from: NSNumber(value: BMI))
+        } else {
+            fatalError("updateBMILabels call before Result initialized - should not happen")
         }
     }
     
