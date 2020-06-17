@@ -22,6 +22,13 @@ class InputCoordinator {
         heightContext = MeasurementContext(type: .height, system: .imperial)
     }
     
+    init(mode: Mode, weightContext: MeasurementContext, heightContext: MeasurementContext, activeInputContext: MeasurementContext?) {
+        self.mode = mode
+        self.weightContext = weightContext
+        self.heightContext = heightContext
+        self.activeInputContext = activeInputContext
+    }
+    
     func currentInputContext() -> MeasurementContext? {
         return activeInputContext
     }
@@ -54,9 +61,9 @@ class InputCoordinator {
         }
     }
     
-    enum Mode {
-        case Inputting
-        case Viewing
+    enum Mode: Int, Codable {
+        case Inputting = 1
+        case Viewing = 2
     }
     
 }
@@ -75,7 +82,7 @@ class MeasurementContext {
     /// There are three mutually exclusive state.  Either the user is inputting weight, or inputting height, or simply viewing (none).  InputState enum
     /// encapsulates these mutually exclusive state.
     ///
-    enum MeasurementType {
+    enum MeasurementType: Int, Codable {
         case weight
         case height
     }

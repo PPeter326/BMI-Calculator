@@ -20,7 +20,7 @@
 		F965990824972F7D00BF3327 /* BodyMeasurementTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F965990724972F7D00BF3327 /* BodyMeasurementTest.swift */; };
 		F96C069F2488BBD700CE3C35 /* BodyMeasurementPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96C069E2488BBD700CE3C35 /* BodyMeasurementPickerView.swift */; };
 		F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F51219CA33F00B81605 /* BodyMeasurement.swift */; };
-		F9855F54219E39B200B81605 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F53219E39B200B81605 /* Utility.swift */; };
+		F9855F54219E39B200B81605 /* UIContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9855F53219E39B200B81605 /* UIContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,7 @@
 		F96C069D2488370B00CE3C35 /* CalculatorPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = CalculatorPlayground.playground; path = "../../../Library/Autosave Information/CalculatorPlayground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		F96C069E2488BBD700CE3C35 /* BodyMeasurementPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMeasurementPickerView.swift; sourceTree = "<group>"; };
 		F9855F51219CA33F00B81605 /* BodyMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMeasurement.swift; sourceTree = "<group>"; };
-		F9855F53219E39B200B81605 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		F9855F53219E39B200B81605 /* UIContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +108,7 @@
 				F9855F51219CA33F00B81605 /* BodyMeasurement.swift */,
 				F905973822F7375B00329E71 /* BMICalculator.swift */,
 				F916205D231276A90006392A /* BackgroundView.swift */,
-				F9855F53219E39B200B81605 /* Utility.swift */,
+				F9855F53219E39B200B81605 /* UIContext.swift */,
 				F916205B2311C5CC0006392A /* View Controller */,
 				F91F2A5522F90B6500EB499B /* BMICalculator+.swift */,
 				F9505B1321574D87003E7E62 /* AppDelegate.swift */,
@@ -241,7 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F916205E231276A90006392A /* BackgroundView.swift in Sources */,
-				F9855F54219E39B200B81605 /* Utility.swift in Sources */,
+				F9855F54219E39B200B81605 /* UIContext.swift in Sources */,
 				F9855F52219CA33F00B81605 /* BodyMeasurement.swift in Sources */,
 				F916205A2311B2940006392A /* DisclaimerViewController.swift in Sources */,
 				F905973922F7375B00329E71 /* BMICalculator.swift in Sources */,
