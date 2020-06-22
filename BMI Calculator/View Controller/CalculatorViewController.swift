@@ -18,20 +18,27 @@ class CalculatorViewController: UIViewController {
     @IBOutlet weak var pickerView: BodyMeasurementPickerView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var BMIBackground: BackgroundView!
-
+    
     
     
     
     // MARK: - Model
     
     /**
-    The data model for ViewController.
+     The data model for ViewController.
      
-    When being accessed, it captures the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) from the view controller.  This happens when user selected a value on pickerview, which triggers a save of file.
+     When being accessed, it captures the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) from the view controller.  This happens when user selected a value on pickerview, which triggers a save of file.
      
-    When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
-    */
-    private var bodyMeasurement: BodyMeasurement!
+     When being set, it resets the data context (weightInLbs, totalHeightInInches, weightInKgs, and totalHeightCentimeters) used by the ViewController.  This happens in viewdidLoad initial set up, when either an existing file loads from disk or a sample file is loaded otherwise.
+     */
+    private var bodyMeasurement: BodyMeasurement {
+        get {
+            BodyMeasurement.loadFromFile() ?? BodyMeasurement.loadSampleMeasurement()
+        }
+        set {
+            BodyMeasurement.saveToFile(measurement: newValue)
+        }
+    }
     
     // MARK: - Weight/Height Input
     
@@ -56,14 +63,14 @@ class CalculatorViewController: UIViewController {
     
     // MARK: - Formatter
     private let weightNumberFormatter: NumberFormatter = {
-       let formatter = NumberFormatter()
+        let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 1
         formatter.minimumFractionDigits = 1
         return formatter
     }()
     
     private let heightNumberFormatter: NumberFormatter = {
-       let formatter = NumberFormatter()
+        let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 0
         formatter.minimumFractionDigits = 0
         return formatter
@@ -76,27 +83,32 @@ class CalculatorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // initialize inputCoordinator from memory or default to viewing of imperial system only
+        inputCoordinator = InputCoordinator.loadInputContext() ?? InputCoordinator()
+        
         let color = UIColor(named: "BackgroundColor")
         view.backgroundColor = color
         
-        // Initial set up
-        if let measurement = BodyMeasurement.loadFromFile() {
-            bodyMeasurement = measurement
-        } else {
-            bodyMeasurement = BodyMeasurement.loadSampleMeasurement()
-        }
-        calculate()
-        updateAllUI()
+        calculate() // calculate BMI
+        updateAllUI() // update button, pickerview, and segment control
         
+        // Have pickerview select weight/
+        
+        if let activeContext = inputCoordinator.currentInputContext() {
+            if activeContext.type == .height {
+                pickerViewSelectsHeight()
+            } else {
+                pickerViewSelectsWeight()
+            }
+        }
     }
-
+    
     // MARK: - User Interaction
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // When user touches outside of the controls
         // switch out of input mode
         // update UI
         inputCoordinator.deactivateInput()
-        saveUI()
         updateAllUI()
     }
     
@@ -112,8 +124,6 @@ class CalculatorViewController: UIViewController {
             updateAllUI()
             pickerViewSelectsWeight()
         }
-        
-        saveUI()
     }
     
     @IBAction func heightButtonTouched(_ sender: UIButton? = nil) {
@@ -126,7 +136,6 @@ class CalculatorViewController: UIViewController {
             updateAllUI()
             pickerViewSelectsHeight()
         }
-        saveUI()
     }
     
     @IBAction func segmentedControlTouched(_ sender: UISegmentedControl) {
@@ -135,8 +144,6 @@ class CalculatorViewController: UIViewController {
         pickerView.reloadAllComponents()
         // pickerview select proper values based on body measurement of current input context
         inputCoordinator.currentInputContext()!.type == .weight ? pickerViewSelectsWeight() : pickerViewSelectsHeight()
-        // save user preference on measurement system
-        saveUI()
         // update weight/height button and BMI calculation
         updateWeightButton()
         updateHeightButton()
@@ -206,41 +213,17 @@ class CalculatorViewController: UIViewController {
         }
         calculate() // calculate BMI
         updateBMILabels()
-        // save user input
-        BodyMeasurement.saveToFile(measurement: bodyMeasurement)
-        
-        saveUI()
-    }
-    
-    fileprivate func saveUI() {
-        // save user preference on measurement system
-        UserDefaults.standard.set(inputCoordinator.weightContext.system.rawValue, forKey: "weightContext")
-        UserDefaults.standard.set(inputCoordinator.heightContext.system.rawValue, forKey: "heightContext")
-        UserDefaults.standard.set(inputCoordinator.mode.rawValue, forKey: "mode")
-        UserDefaults.standard.set(inputCoordinator.currentInputContext()?.type.rawValue, forKey: "activeType")
-        UserDefaults.standard.set(inputCoordinator.currentInputContext()?.system.rawValue, forKey: "activeSystem")
     }
     
     // MARK: - Input
     
     /// Will attempt to load height and weight context (imperial vs metric) of the buttons from UserDefault if they were properly saved, otherwise load imperial system by default
-    fileprivate var inputCoordinator:InputCoordinator = {
-        let heightSystem = MeasurementContext.MeasurementSystem(rawValue: UserDefaults.standard.integer(forKey: "heightContext")) ?? .imperial
-        let heightContext = MeasurementContext(type: .height, system: heightSystem)
-        let weightSystem = MeasurementContext.MeasurementSystem(rawValue: UserDefaults.standard.integer(forKey: "weightContext")) ?? .imperial
-        let weightContext = MeasurementContext(type: .weight, system: weightSystem)
-        let mode = InputCoordinator.Mode(rawValue: UserDefaults.standard.integer(forKey: "mode")) ?? .Viewing
-        var activeContext: MeasurementContext?
-        if let activeType = MeasurementContext.MeasurementType(rawValue: UserDefaults.standard.integer(forKey: "activeType")),
-            let activeSystem = MeasurementContext.MeasurementSystem(rawValue: UserDefaults.standard.integer(forKey: "activeSystem"))
-        {
-            activeContext = MeasurementContext(type: activeType, system: activeSystem)
+    // MARK: InputModel
+    fileprivate var inputCoordinator: InputCoordinator! {
+        didSet {
+            inputCoordinator.saveInputContext()
         }
-        
-        let inputCoordinator = InputCoordinator(mode: mode, weightContext: weightContext, heightContext: heightContext, activeInputContext: activeContext)
-        
-        return inputCoordinator
-    }()
+    }
     
     private func pickerViewSelectsWeight(weight: Measurement<UnitMass>! = nil) {
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .weight {
@@ -257,7 +240,7 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(weightInLbsWholeNumberIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(weightInLbsDecimalIndex!, inComponent: 1, animated: true)
-
+                
             } else {
                 
                 weight.convert(to: UnitMass.kilograms)
@@ -269,7 +252,6 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(weightInKgWholeNumberIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(weightInKgDecimalIndex!, inComponent: 1, animated: true)
-
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
@@ -279,11 +261,9 @@ class CalculatorViewController: UIViewController {
     private func pickerViewSelectsHeight(height: Measurement<UnitLength>! = nil) {
         
         if let activeContext = inputCoordinator.currentInputContext(), activeContext.type == .height {
-            
             var height = height ?? bodyMeasurement.height
             
             if activeContext.system == .imperial {
-                
                 height.convert(to: UnitLength.inches) // converts height to inch so it can be rounded
                 let heightInInches = Int(height.value.rounded())
                 let (ft, inches) = heightInInches.quotientAndRemainder(dividingBy: 12)
@@ -304,7 +284,6 @@ class CalculatorViewController: UIViewController {
                 
                 pickerView.selectRow(heightInMeterIndex!, inComponent: 0, animated: true)
                 pickerView.selectRow(heightInCentimeterIndex!, inComponent: 2, animated: true)
-                
             }
         } else {
             fatalError("Invalid - there should be active context when pickerViewSelectsWeight() is called")
@@ -318,20 +297,11 @@ class CalculatorViewController: UIViewController {
     
     // MARK: - UI Update
     private func updateAllUI() {
-        
         updateWeightButton()
         updateHeightButton()
         updateSegmentedControl()
         updatePickerView()
         updateBMILabels()
-        
-        if let activeContext = inputCoordinator.currentInputContext() {
-            if activeContext.type == .weight {
-                pickerViewSelectsWeight()
-            } else {
-                pickerViewSelectsHeight()
-            }
-        }
     }
     
     private func updateWeightButton() {
@@ -365,12 +335,11 @@ class CalculatorViewController: UIViewController {
         var height = bodyMeasurement.height
         
         switch inputCoordinator.heightContext.system {
-            
         case .imperial:
             height.convert(to: UnitLength.inches) // converts height to inch so it can be rounded
             let heightInInches = Int(height.value.rounded())
             let (ft, inches) = heightInInches.quotientAndRemainder(dividingBy: 12)
-
+            
             let heightString = heightNumberFormatter.string(from: NSNumber(value: ft))! + " ft " + heightNumberFormatter.string(from: NSNumber(value: inches))! + " in"
             heightButton.setTitle(heightString, for: .normal)
             
@@ -388,7 +357,7 @@ class CalculatorViewController: UIViewController {
         segmentedControl.isHidden = (inputCoordinator.mode == .Viewing)
         
         if let currentContext = inputCoordinator.currentInputContext() {
-        let currentBodyMeasurement = currentContext.type
+            let currentBodyMeasurement = currentContext.type
             switch currentBodyMeasurement  {
             case .weight:
                 segmentedControl.setTitle("Lbs", forSegmentAt: 0)
@@ -411,10 +380,8 @@ class CalculatorViewController: UIViewController {
     }
     
     private func updatePickerView() {
-        
         pickerView.isHidden = (inputCoordinator.mode == .Viewing)
         pickerView.reloadAllComponents()
-        
     }
     
     func updateBMILabels() {
